@@ -20,3 +20,6 @@ headless: true
 - [Mermaid]({{< relref "/docs/shortcodes/mermaid" >}})
 - [Tabs]({{< relref "/docs/shortcodes/tabs" >}})
 <br />
+
+- **System Design**({{< relref "/docs/systemdesign" >}})
+<br />
