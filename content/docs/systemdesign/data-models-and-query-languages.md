@@ -27,6 +27,7 @@ draft: true
     * schema flexibility, better performace due to locality
     * for some applications, it is closer to the data structure used by the applicaton
     * Fit for the appilication if the data is a document-like structure(e.g. tree)
+    * one to many relationships
 * Cons
     * bad for many to many relationships
         * since application code need to do additional work to keep denormalized(repeat) data consistent
@@ -62,3 +63,61 @@ Simple initial model is `hierarchical model` which is a tree structure and fit i
 * Defined table structure to be filled information
 * query Optimizer automatically decide order of the sub queries
 * By declaring a new index, we can query data in new ways
+
+## Data locality for queries
+* Document is usually stored as a single continuous string
+* `Storage locality`: performance happened when the application need to access the whole document(e.g. render it on a web page)
+* Updates to a document, the entire document needs to be rewritten in general -> tips: **keep documents fairly small and avoid writes that increase the size of a document**
+* locality is not limited to the document model and used in the relational model as well
+
+# Query
+## Query Languages for Data
+
+### Declarative query
+* Sql style language
+* Focus on how you want the data to be transformed(e,g, sorted, grouped) not how to achieve that goal
+* It's possible for the db to introduce performance improvements without requiring any changes to the query(**query optimizer**)
+* Lend themselves to parallel execution
+* web: e.g. xml, css
+
+### Imperative language/query
+* programming languages specify the operation
+* Tell the computer to perform certain operations in a certain order
+* hard to parallelize across multiple cores  and muvhines since of the ordered specified by the language
+* web: e.g. js to do the styling operations                                                                                                                                          
+
+### Map reduce query
+* neither declarative query language nor a fully imperative query API, but sinewhere in between
+* map and reduce functions must be the pure functions
+    * they only use the data that us passed to them as input
+    * they cannot perform additional db queries
+    * they must not have any side effects
+* fairly low level programming model for distributed execution on a cluster of machines
+
+# Graph-Like Data Models
+* Graphs are not limited to homogeneous(similar kind or nature) data. It aslo has the equally powerful use of graphs to provide a consistent way of storing compeletely different types of objects in a single db
+
+## Property Graphs
+Each vertex consists of
+* A unique identifier
+* A set of outgoing edges
+* A set of incoming edges
+* **A collection of properties(key-valure pairs)**
+
+Each edge consists of
+* A unique identifier
+* the tail vertex
+* the head vertex
+* A label to describe the kind of **relationship** between two vertices
+* **A collection of properties(key-valure pairs)**
+
+Graph can be considered as two relation tables - one for vertices and one for edges
+
+By using different labels for different kinds of relationships
+* store different kinds of information in a single graph
+* Maintaing a clean data model
+* a great deal of flexibility for data modeling and good for **evolvability**
+  
+## Query
+### Cypher query language
+`Cypher` is a **delcarative** language for property graphs(created for Neo4j graph db)
