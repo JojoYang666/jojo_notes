@@ -1,8 +1,3 @@
-<!-- ---
-title: "Data Models and Query Languages"
-date: 2023-06-14T22:14:44-07:00
-draft: true
---- -->
 # Relational Model
 * Relational databases: transaction processing or batch processing
 * Goal: hide the implementation detail behind a cleaner interface
@@ -13,7 +8,7 @@ draft: true
         * migrate at one time
         * Set null for the new schema and fill/update it at the read time
 
-# No Sql/ Document Model
+# Document Model(No sql)
 * Greater scalability
 * A more dynamic and experssive data mode
 * `document rederence` for join
@@ -94,7 +89,7 @@ Simple initial model is `hierarchical model` which is a tree structure and fit i
     * they must not have any side effects
 * fairly low level programming model for distributed execution on a cluster of machines
 
-# Graph-Like Data Models
+# Graph-Like Data Models(No sql)
 * Graphs are not limited to homogeneous(similar kind or nature) data. It aslo has the equally powerful use of graphs to provide a consistent way of storing compeletely different types of objects in a single db
 
 ## Property Graphs
@@ -121,3 +116,42 @@ By using different labels for different kinds of relationships
 ## Query
 ### Cypher query language
 `Cypher` is a **delcarative** language for property graphs(created for Neo4j graph db)
+
+### Graph queries in sql
+* Traversing a variable number of edges before find the vertex you are looking for is needed for graph query
+* `Recursive common table experssions` - `WITH RECURSIVE` syntax
+  * variable-length traversal paths
+
+### Triple-Stores and SPAROL
+
+## Triple store
+1. stored in the form of simple three-part statements: (subject predicate, object)
+2. `subject` is equivalent to a vertex in a graph
+3. `object` is one of two things in the graph:
+   1. A value in a primitive datatype -> equivalent to the key and value of a property on the subject vertex
+   2. another vertex in the graph --> predicate is an edge in the graph
+
+## The semantic web
+idea of with information as machine-readable data for computers to read
+
+### the RDF data model
+1. RDF(resource description framework):
+* Allowing data from different websites to be autimatically combined into a web of data
+* Designed for internet-wide data exchage
+* (subject, predicate, object) -- often URIs(words with the url prefix as namespace)
+
+2. SPARQL query language
+   1. `SPARQL`: query languagefor triple-stores using the RDF data model
+
+## Graph db vs Network Model
+1. Network model(CODASYL): a schema required for specifying the record type to be nested within which other record type, while graph db does not have such restriction
+2. Network model(CODASYL): reach particular record requiring tranverse one of the access path, while  graph can be refer to any vertex by id
+3. Network model(CODASYL): children of a record were an ordered set, while graph db does not have such restriction
+4. Network model(CODASYL): queries are imperative, diffcult to write and easily broken by changes in the schema
+
+## The Foundation: datalog
+1. older language
+2. foundation of later query languages build upon
+3. In datalog, define `rules` that tell db about the new predicates and execute subsequent rules when a rule is matched
+4. can be combined and reused in different queries
+ 
