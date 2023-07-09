@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Relational Model # Relational databases: transaction processing or batch processing Goal: hide the implementation detail behind a cleaner interface foreign key for join Pros: fit for joins - many to one and many to many relationships Schema-on-write - schema explicit and db ebsures data conforms to it Migration needed whe schema changed migrate at one time Set null for the new schema and fill/update it at the read time Document Model(No sql) # Greater scalability A more dynamic and experssive data mode document rederence for join Schema-on-read: the implicit data structure * only interpreted when data is read Application code to handle the implict schema changes.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="Relational Model # Relational databases: transaction processing or batch processing Goal: hide the implementation detail behind a cleaner interface foreign key for join Pros: fit for joins - many to one and many to many relationships Schema-on-write - schema explicit and db ebsures data conforms to it Migration needed whe schema changed migrate at one time Set null for the new schema and fill/update it at the read time Document Model(No sql) # Greater scalability A more dynamic and experssive data mode document rederence for join Schema-on-read: the implicit data structure * only interpreted when data is read Application code to handle the implict schema changes." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://jojoyang.site/jojo_notes/docs/systemdesign/data-models-and-query-languages/" /><meta property="article:section" content="docs" />
+
+
+<title>Data Models and Query Languages | My New Hugo Site</title>
+<link rel="manifest" href="/jojo_notes/manifest.json">
+<link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
+  <script defer src="/jojo_notes/flexsearch.min.js"></script>
+  <script defer src="/jojo_notes/en.search.min.0126f2133bcb9d844499c7fafa21d442125baef88c94c661de73f8608492d955.js" integrity="sha256-ASbyEzvLnYREmcf6&#43;iHUQhJbrviMlMZh3nP4YISS2VU=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/jojo_notes/"><span>My New Hugo Site</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="" aria-label="" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/" class="">Example Site</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/table-of-contents/" class="">Table of Contents</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/table-of-contents/with-toc/" class="">With ToC</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/table-of-contents/without-toc/" class="">Without ToC</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-4e46b01272d410b3a99461d79326ddf4" class="toggle"  />
+    <label for="section-4e46b01272d410b3a99461d79326ddf4" class="flex justify-between">
+      <a role="button" class="">Collapsed</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/collapsed/3rd-level/" class="">3rd Level</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/collapsed/3rd-level/4th-level/" class="">4th Level</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <span>Shortcodes</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/buttons/" class="">Buttons</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/columns/" class="">Columns</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/details/" class="">Details</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/expand/" class="">Expand</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/hints/" class="">Hints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/katex/" class="">Katex</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/mermaid/" class="">Mermaid</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d3fc1bf6d66cd84b896a0af9f40cb1d5" class="toggle"  />
+    <label for="section-d3fc1bf6d66cd84b896a0af9f40cb1d5" class="flex justify-between">
+      <a href="/jojo_notes/docs/shortcodes/section/" class="">Section</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/section/first-page/" class="">First Page</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/section/second-page/" class="">Second Page</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/tabs/" class="">Tabs</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/systemdesign/data-models-and-query-languages/" class="active">Data Models and Query Languages</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/systemdesign/storage-and-retrieval/" class="">Storage and Retrieval</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/jojo_notes/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/jojo_notes/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Data Models and Query Languages</strong>
+
+  <label for="toc-control">
+    
+    <img src="/jojo_notes/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#network-modelcodasyl">Network model(CODASYL)</a></li>
+    <li><a href="#the-relational-model">The relational model</a></li>
+    <li><a href="#data-locality-for-queries">Data locality for queries</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#query-languages-for-data">Query Languages for Data</a>
+      <ul>
+        <li><a href="#declarative-query">Declarative query</a></li>
+        <li><a href="#imperative-languagequery">Imperative language/query</a></li>
+        <li><a href="#map-reduce-query">Map reduce query</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#property-graphs">Property Graphs</a></li>
+    <li><a href="#query-1">Query</a>
+      <ul>
+        <li><a href="#cypher-query-language">Cypher query language</a></li>
+        <li><a href="#graph-queries-in-sql">Graph queries in sql</a></li>
+        <li><a href="#triple-stores-and-sparol">Triple-Stores and SPAROL</a></li>
+      </ul>
+    </li>
+    <li><a href="#triple-store">Triple store</a></li>
+    <li><a href="#the-semantic-web">The semantic web</a>
+      <ul>
+        <li><a href="#the-rdf-data-model">the RDF data model</a></li>
+      </ul>
+    </li>
+    <li><a href="#graph-db-vs-network-model">Graph db vs Network Model</a></li>
+    <li><a href="#the-foundation-datalog">The Foundation: datalog</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="relational-model">
+  Relational Model
+  <a class="anchor" href="#relational-model">#</a>
+</h1>
+<ul>
+<li>Relational databases: transaction processing or batch processing</li>
+<li>Goal: hide the implementation detail behind a cleaner interface</li>
+<li><code>foreign key</code> for join</li>
+<li>Pros: fit for joins - many to one and many to many relationships</li>
+<li>Schema-on-write - schema explicit and db ebsures data conforms to it
+<ul>
+<li>Migration needed whe schema changed
+<ul>
+<li>migrate at one time</li>
+<li>Set null for the new schema and fill/update it at the read time</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="document-modelno-sql">
+  Document Model(No sql)
+  <a class="anchor" href="#document-modelno-sql">#</a>
+</h1>
+<ul>
+<li>Greater scalability</li>
+<li>A more dynamic and experssive data mode</li>
+<li><code>document rederence</code> for join</li>
+<li>Schema-on-read: the implicit data structure * only interpreted when data is read
+<ul>
+<li>Application code to handle the implict schema changes.</li>
+<li>use case:
+<ul>
+<li>items in the collection do not all have the same structure for some reason
+<ul>
+<li>many different types of objects and it&rsquo;s not proactical to put each type object in its own table</li>
+<li>the structure of the data is determined by external systems over which you have no control and which may change at time</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Advantage:
+<ul>
+<li>schema flexibility, better performace due to locality</li>
+<li>for some applications, it is closer to the data structure used by the applicaton</li>
+<li>Fit for the appilication if the data is a document-like structure(e.g. tree)</li>
+<li>one to many relationships</li>
+</ul>
+</li>
+<li>Cons
+<ul>
+<li>bad for many to many relationships
+<ul>
+<li>since application code need to do additional work to keep denormalized(repeat) data consistent</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="object-relational-mismatch">
+  Object-Relational Mismatch
+  <a class="anchor" href="#object-relational-mismatch">#</a>
+</h1>
+<ul>
+<li>
+<p>Impedance mismatch: awkward translation layerß between objects in the application code and the database model of tables, rows &amp; columns</p>
+</li>
+<li>
+<p>One to many relationship</p>
+<ul>
+<li>can be represented on the ways below
+<ul>
+<li>Store information in the seperate tables with the foreign key</li>
+<li>Allow multi-value data to be stored within a single row</li>
+<li>Encode as a document and store in a txt column - but this cannot be quried</li>
+</ul>
+</li>
+<li>tree structure</li>
+</ul>
+</li>
+<li>
+<p>Many to one relationship / many to many relationsips</p>
+<ul>
+<li>using the meanless ID to represent entity - key</li>
+<li>hard to fit in to the document db since join is every week</li>
+</ul>
+</li>
+</ul>
+<h1 id="database-models">
+  Database models
+  <a class="anchor" href="#database-models">#</a>
+</h1>
+<p>Simple initial model is <code>hierarchical model</code> which is a tree structure and fit into one to many relationship but hard for many to many relations because of joining(used in the document db more often).</p>
+<h2 id="network-modelcodasyl">
+  Network model(CODASYL)
+  <a class="anchor" href="#network-modelcodasyl">#</a>
+</h2>
+<ul>
+<li>Generaliztion of the hierarchial model</li>
+<li>one mode/record can have multiple parents</li>
+<li>Good for many to one or many to many relationships</li>
+<li>The links between records are not foreign keys and more like the pointers in the programming language</li>
+<li>The only way of accessing a record: follow a path from a root record along these chains of links - called <code>access path</code></li>
+<li>One data may have different access path, the head have to keep track of all different access paths</li>
+<li>Disadvantage
+<ul>
+<li>Hard for the querying and updating db
+<ul>
+<li>if fo noy have a path to the quired data, gave to go through a lot of handwritten db query code and rewirte it for the new access path</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="the-relational-model">
+  The relational model
+  <a class="anchor" href="#the-relational-model">#</a>
+</h2>
+<ul>
+<li>Defined table structure to be filled information</li>
+<li>query Optimizer automatically decide order of the sub queries</li>
+<li>By declaring a new index, we can query data in new ways</li>
+</ul>
+<h2 id="data-locality-for-queries">
+  Data locality for queries
+  <a class="anchor" href="#data-locality-for-queries">#</a>
+</h2>
+<ul>
+<li>Document is usually stored as a single continuous string</li>
+<li><code>Storage locality</code>: performance happened when the application need to access the whole document(e.g. render it on a web page)</li>
+<li>Updates to a document, the entire document needs to be rewritten in general -&gt; tips: <strong>keep documents fairly small and avoid writes that increase the size of a document</strong></li>
+<li>locality is not limited to the document model and used in the relational model as well</li>
+</ul>
+<h1 id="query">
+  Query
+  <a class="anchor" href="#query">#</a>
+</h1>
+<h2 id="query-languages-for-data">
+  Query Languages for Data
+  <a class="anchor" href="#query-languages-for-data">#</a>
+</h2>
+<h3 id="declarative-query">
+  Declarative query
+  <a class="anchor" href="#declarative-query">#</a>
+</h3>
+<ul>
+<li>Sql style language</li>
+<li>Focus on how you want the data to be transformed(e,g, sorted, grouped) not how to achieve that goal</li>
+<li>It&rsquo;s possible for the db to introduce performance improvements without requiring any changes to the query(<strong>query optimizer</strong>)</li>
+<li>Lend themselves to parallel execution</li>
+<li>web: e.g. xml, css</li>
+</ul>
+<h3 id="imperative-languagequery">
+  Imperative language/query
+  <a class="anchor" href="#imperative-languagequery">#</a>
+</h3>
+<ul>
+<li>programming languages specify the operation</li>
+<li>Tell the computer to perform certain operations in a certain order</li>
+<li>hard to parallelize across multiple cores  and muvhines since of the ordered specified by the language</li>
+<li>web: e.g. js to do the styling operations</li>
+</ul>
+<h3 id="map-reduce-query">
+  Map reduce query
+  <a class="anchor" href="#map-reduce-query">#</a>
+</h3>
+<ul>
+<li>neither declarative query language nor a fully imperative query API, but sinewhere in between</li>
+<li>map and reduce functions must be the pure functions
+<ul>
+<li>they only use the data that us passed to them as input</li>
+<li>they cannot perform additional db queries</li>
+<li>they must not have any side effects</li>
+</ul>
+</li>
+<li>fairly low level programming model for distributed execution on a cluster of machines</li>
+</ul>
+<h1 id="graph-like-data-modelsno-sql">
+  Graph-Like Data Models(No sql)
+  <a class="anchor" href="#graph-like-data-modelsno-sql">#</a>
+</h1>
+<ul>
+<li>Graphs are not limited to homogeneous(similar kind or nature) data. It aslo has the equally powerful use of graphs to provide a consistent way of storing compeletely different types of objects in a single db</li>
+</ul>
+<h2 id="property-graphs">
+  Property Graphs
+  <a class="anchor" href="#property-graphs">#</a>
+</h2>
+<p>Each vertex consists of</p>
+<ul>
+<li>A unique identifier</li>
+<li>A set of outgoing edges</li>
+<li>A set of incoming edges</li>
+<li><strong>A collection of properties(key-valure pairs)</strong></li>
+</ul>
+<p>Each edge consists of</p>
+<ul>
+<li>A unique identifier</li>
+<li>the tail vertex</li>
+<li>the head vertex</li>
+<li>A label to describe the kind of <strong>relationship</strong> between two vertices</li>
+<li><strong>A collection of properties(key-valure pairs)</strong></li>
+</ul>
+<p>Graph can be considered as two relation tables - one for vertices and one for edges</p>
+<p>By using different labels for different kinds of relationships</p>
+<ul>
+<li>store different kinds of information in a single graph</li>
+<li>Maintaing a clean data model</li>
+<li>a great deal of flexibility for data modeling and good for <strong>evolvability</strong></li>
+</ul>
+<h2 id="query-1">
+  Query
+  <a class="anchor" href="#query-1">#</a>
+</h2>
+<h3 id="cypher-query-language">
+  Cypher query language
+  <a class="anchor" href="#cypher-query-language">#</a>
+</h3>
+<p><code>Cypher</code> is a <strong>delcarative</strong> language for property graphs(created for Neo4j graph db)</p>
+<h3 id="graph-queries-in-sql">
+  Graph queries in sql
+  <a class="anchor" href="#graph-queries-in-sql">#</a>
+</h3>
+<ul>
+<li>Traversing a variable number of edges before find the vertex you are looking for is needed for graph query</li>
+<li><code>Recursive common table experssions</code> - <code>WITH RECURSIVE</code> syntax
+<ul>
+<li>variable-length traversal paths</li>
+</ul>
+</li>
+</ul>
+<h3 id="triple-stores-and-sparol">
+  Triple-Stores and SPAROL
+  <a class="anchor" href="#triple-stores-and-sparol">#</a>
+</h3>
+<h2 id="triple-store">
+  Triple store
+  <a class="anchor" href="#triple-store">#</a>
+</h2>
+<ol>
+<li>stored in the form of simple three-part statements: (subject predicate, object)</li>
+<li><code>subject</code> is equivalent to a vertex in a graph</li>
+<li><code>object</code> is one of two things in the graph:
+<ol>
+<li>A value in a primitive datatype -&gt; equivalent to the key and value of a property on the subject vertex</li>
+<li>another vertex in the graph &ndash;&gt; predicate is an edge in the graph</li>
+</ol>
+</li>
+</ol>
+<h2 id="the-semantic-web">
+  The semantic web
+  <a class="anchor" href="#the-semantic-web">#</a>
+</h2>
+<p>idea of with information as machine-readable data for computers to read</p>
+<h3 id="the-rdf-data-model">
+  the RDF data model
+  <a class="anchor" href="#the-rdf-data-model">#</a>
+</h3>
+<ol>
+<li>RDF(resource description framework):</li>
+</ol>
+<ul>
+<li>Allowing data from different websites to be autimatically combined into a web of data</li>
+<li>Designed for internet-wide data exchage</li>
+<li>(subject, predicate, object) &ndash; often URIs(words with the url prefix as namespace)</li>
+</ul>
+<ol start="2">
+<li>SPARQL query language
+<ol>
+<li><code>SPARQL</code>: query languagefor triple-stores using the RDF data model</li>
+</ol>
+</li>
+</ol>
+<h2 id="graph-db-vs-network-model">
+  Graph db vs Network Model
+  <a class="anchor" href="#graph-db-vs-network-model">#</a>
+</h2>
+<ol>
+<li>Network model(CODASYL): a schema required for specifying the record type to be nested within which other record type, while graph db does not have such restriction</li>
+<li>Network model(CODASYL): reach particular record requiring tranverse one of the access path, while  graph can be refer to any vertex by id</li>
+<li>Network model(CODASYL): children of a record were an ordered set, while graph db does not have such restriction</li>
+<li>Network model(CODASYL): queries are imperative, diffcult to write and easily broken by changes in the schema</li>
+</ol>
+<h2 id="the-foundation-datalog">
+  The Foundation: datalog
+  <a class="anchor" href="#the-foundation-datalog">#</a>
+</h2>
+<ol>
+<li>older language</li>
+<li>foundation of later query languages build upon</li>
+<li>In datalog, define <code>rules</code> that tell db about the new predicates and execute subsequent rules when a rule is matched</li>
+<li>can be combined and reused in different queries</li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#network-modelcodasyl">Network model(CODASYL)</a></li>
+    <li><a href="#the-relational-model">The relational model</a></li>
+    <li><a href="#data-locality-for-queries">Data locality for queries</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#query-languages-for-data">Query Languages for Data</a>
+      <ul>
+        <li><a href="#declarative-query">Declarative query</a></li>
+        <li><a href="#imperative-languagequery">Imperative language/query</a></li>
+        <li><a href="#map-reduce-query">Map reduce query</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#property-graphs">Property Graphs</a></li>
+    <li><a href="#query-1">Query</a>
+      <ul>
+        <li><a href="#cypher-query-language">Cypher query language</a></li>
+        <li><a href="#graph-queries-in-sql">Graph queries in sql</a></li>
+        <li><a href="#triple-stores-and-sparol">Triple-Stores and SPAROL</a></li>
+      </ul>
+    </li>
+    <li><a href="#triple-store">Triple store</a></li>
+    <li><a href="#the-semantic-web">The semantic web</a>
+      <ul>
+        <li><a href="#the-rdf-data-model">the RDF data model</a></li>
+      </ul>
+    </li>
+    <li><a href="#graph-db-vs-network-model">Graph db vs Network Model</a></li>
+    <li><a href="#the-foundation-datalog">The Foundation: datalog</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Data Structures that Power Your Database # Index: To keep some additional metadata on the side, which acts as a signpost and help to locate the additional metadata on the side. Trade off in the storage systems: well-chosen indexes speed up read queries but every index slows down writes Write &ndash;&gt; append on the file Hash Indexes # In memory hash map(e.g. bitcask) # Key is mapped to a byte offset in the data file High performance on both write and read &ndash;&gt; keys fit in the available RAM Fit for: value for each key is updated frequently Avioid running out of disk space if only append to a file for writing operation(insert &amp; update) Break the log into segments of a certain size by closing a segment file when it reaches a certain size Perform compaction on the segments in a background thread Possible issues on implementaion of the segments and compaction # File format">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="Data Structures that Power Your Database # Index: To keep some additional metadata on the side, which acts as a signpost and help to locate the additional metadata on the side. Trade off in the storage systems: well-chosen indexes speed up read queries but every index slows down writes Write &ndash;&gt; append on the file Hash Indexes # In memory hash map(e.g. bitcask) # Key is mapped to a byte offset in the data file High performance on both write and read &ndash;&gt; keys fit in the available RAM Fit for: value for each key is updated frequently Avioid running out of disk space if only append to a file for writing operation(insert &amp; update) Break the log into segments of a certain size by closing a segment file when it reaches a certain size Perform compaction on the segments in a background thread Possible issues on implementaion of the segments and compaction # File format" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://jojoyang.site/jojo_notes/docs/systemdesign/storage-and-retrieval/" /><meta property="article:section" content="docs" />
+
+
+<title>Storage and Retrieval | My New Hugo Site</title>
+<link rel="manifest" href="/jojo_notes/manifest.json">
+<link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
+  <script defer src="/jojo_notes/flexsearch.min.js"></script>
+  <script defer src="/jojo_notes/en.search.min.0126f2133bcb9d844499c7fafa21d442125baef88c94c661de73f8608492d955.js" integrity="sha256-ASbyEzvLnYREmcf6&#43;iHUQhJbrviMlMZh3nP4YISS2VU=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/jojo_notes/"><span>My New Hugo Site</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="" aria-label="" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/" class="">Example Site</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/table-of-contents/" class="">Table of Contents</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/table-of-contents/with-toc/" class="">With ToC</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/table-of-contents/without-toc/" class="">Without ToC</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-4e46b01272d410b3a99461d79326ddf4" class="toggle"  />
+    <label for="section-4e46b01272d410b3a99461d79326ddf4" class="flex justify-between">
+      <a role="button" class="">Collapsed</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/collapsed/3rd-level/" class="">3rd Level</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/example/collapsed/3rd-level/4th-level/" class="">4th Level</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <span>Shortcodes</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/buttons/" class="">Buttons</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/columns/" class="">Columns</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/details/" class="">Details</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/expand/" class="">Expand</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/hints/" class="">Hints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/katex/" class="">Katex</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/mermaid/" class="">Mermaid</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d3fc1bf6d66cd84b896a0af9f40cb1d5" class="toggle"  />
+    <label for="section-d3fc1bf6d66cd84b896a0af9f40cb1d5" class="flex justify-between">
+      <a href="/jojo_notes/docs/shortcodes/section/" class="">Section</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/section/first-page/" class="">First Page</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/section/second-page/" class="">Second Page</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/shortcodes/tabs/" class="">Tabs</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/systemdesign/data-models-and-query-languages/" class="">Data Models and Query Languages</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/systemdesign/storage-and-retrieval/" class="active">Storage and Retrieval</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/jojo_notes/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/jojo_notes/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Storage and Retrieval</strong>
+
+  <label for="toc-control">
+    
+    <img src="/jojo_notes/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#hash-indexes">Hash Indexes</a>
+      <ul>
+        <li><a href="#in-memory-hash-mapeg-bitcask">In memory hash map(e.g. bitcask)</a></li>
+      </ul>
+    </li>
+    <li><a href="#sstables-and-lsm-trees">SSTables and LSM-Trees</a>
+      <ul>
+        <li><a href="#sstables">SSTables</a></li>
+        <li><a href="#lsm-tree">LSM-Tree</a></li>
+        <li><a href="#b-trees">B-Trees</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="data-structures-that-power-your-database">
+  Data Structures that Power Your Database
+  <a class="anchor" href="#data-structures-that-power-your-database">#</a>
+</h1>
+<ul>
+<li>Index: To keep some additional metadata on the side, which acts as a signpost and help to locate the additional metadata on the side.</li>
+<li>Trade off in the storage systems: well-chosen indexes speed up read queries but every index slows down writes</li>
+<li>Write &ndash;&gt; append on the file</li>
+</ul>
+<h2 id="hash-indexes">
+  Hash Indexes
+  <a class="anchor" href="#hash-indexes">#</a>
+</h2>
+<h3 id="in-memory-hash-mapeg-bitcask">
+  In memory hash map(e.g. bitcask)
+  <a class="anchor" href="#in-memory-hash-mapeg-bitcask">#</a>
+</h3>
+<ul>
+<li>Key is mapped to a <strong>byte offset</strong> in the data file</li>
+<li>High performance on both write and read &ndash;&gt; keys fit in the available RAM</li>
+<li>Fit for: value for each key is updated frequently</li>
+<li>Avioid running out of disk space if only append to a file for writing operation(insert &amp; update)
+<ul>
+<li>Break the log into segments of a certain size by closing a segment file when it reaches a certain size</li>
+<li>Perform compaction on the segments in a background thread</li>
+</ul>
+</li>
+</ul>
+<h4 id="possible-issues-on-implementaion-of-the-segments-and-compaction">
+  Possible issues on implementaion of the segments and compaction
+  <a class="anchor" href="#possible-issues-on-implementaion-of-the-segments-and-compaction">#</a>
+</h4>
+<ul>
+<li>
+<p>File format</p>
+<ul>
+<li>Use a binary format that first encodes the length of a string in bytes, followed by the raw string(without need for escaping)</li>
+</ul>
+</li>
+<li>
+<p>Deleting records</p>
+<ul>
+<li>Delete a key-value pair, append a spection deletion record to the data file(called &rsquo;tombstome')</li>
+<li>Merge happened &ndash;&gt; discard any previous values for the deleted key</li>
+</ul>
+</li>
+<li>
+<p>Crash recovery</p>
+<ul>
+<li>restore from the segement file &ndash;&gt; but pretty slow if the segment files are large</li>
+<li>Speed up by storing a snapshot of each segment&rsquo;s hash map on disk</li>
+</ul>
+</li>
+<li>
+<p>Partially written records</p>
+<ul>
+<li>Appebding record did not finsh when crash happened</li>
+<li>using <code>checksums</code> -&gt; to detect partially written records and ignore it</li>
+</ul>
+</li>
+<li>
+<p>Concurrency control</p>
+<ul>
+<li>Single thread for the writing while read can be concurrently by multiple threads</li>
+</ul>
+</li>
+</ul>
+<h4 id="pros-and-cons-for-the-appebd-only-design-for-the-hash-table-index">
+  Pros and cons for the appebd-only design for the hash table index
+  <a class="anchor" href="#pros-and-cons-for-the-appebd-only-design-for-the-hash-table-index">#</a>
+</h4>
+<ul>
+<li>
+<p>Pros</p>
+<ul>
+<li>Sequential write operations faster than random writes</li>
+<li>Concurrency and crash recovery simpler</li>
+<li>Merging old segemnts avoids the problem of data files getting fragmented over time</li>
+</ul>
+</li>
+<li>
+<p>Cons</p>
+<ul>
+<li>Hash table must fit in memory</li>
+<li>Range queries are not efficient - e.g. scaning over all keys between kitty00000 and kitty99999</li>
+</ul>
+</li>
+</ul>
+<h2 id="sstables-and-lsm-trees">
+  SSTables and LSM-Trees
+  <a class="anchor" href="#sstables-and-lsm-trees">#</a>
+</h2>
+<h3 id="sstables">
+  SSTables
+  <a class="anchor" href="#sstables">#</a>
+</h3>
+<ul>
+<li>Definiation: the sequence pf key-value pairs is <strong>sorted by key</strong></li>
+<li>Pros
+<ul>
+<li>Merging segment is simple and efficient(merge-sort)</li>
+<li>No longer need to keep an index of all keys in memory to find a particular key in the file
+<ul>
+<li>Keep an in-memory index with offsets for <strong>some of keys</strong> - sparse since key is sorted</li>
+<li>Sorted segment on the disk can be compressed before writing into the disk(save disk space &amp; reduce the I/O bandwidth)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="constructing-and-maintaing-sstables">
+  Constructing and maintaing SSTables
+  <a class="anchor" href="#constructing-and-maintaing-sstables">#</a>
+</h4>
+<ul>
+<li>
+<p>Maintaing it in the memory with tree structure -&gt;(e.g. red-black tree or AVL tree)</p>
+<ul>
+<li>insert it in any order and read them in a sorted order</li>
+</ul>
+</li>
+<li>
+<p>How it works</p>
+<ul>
+<li>write comes in &ndash;&gt; add it into an in-memory balanced tree data structure(called memtable)</li>
+<li>memtable gets bigger than threshold(a few MB) &ndash;&gt; write into disk as SSTable</li>
+<li>serve a read request &ndash;&gt; in memotable -&gt;most recent on-disk segment &ndash;&gt; next older segment</li>
+<li>run merging and compaction process in the background &amp; discard overwritten or deleted values</li>
+</ul>
+</li>
+<li>
+<p>what happened if db crashes</p>
+<ul>
+<li>Keep a separate log on disk to which every write is immediately appended</li>
+</ul>
+</li>
+</ul>
+<h3 id="lsm-tree">
+  LSM-Tree
+  <a class="anchor" href="#lsm-tree">#</a>
+</h3>
+<ul>
+<li>
+<p>Log-Structured Merge Tree(LSM tree): keeping a cascade of SSTables that are merged in the background</p>
+</li>
+<li>
+<p>LST tree can be slow when looking up keys that do not exist in the db</p>
+<ul>
+<li>Using <strong>Bloom filters</strong> to solve it - a memory-efficient data structure for approximating the contents pf a set</li>
+<li>Tell you if a key is in the db - save many unnecessary disk reads for nonexistent keys</li>
+</ul>
+</li>
+<li>
+<p>Size-tiered compaction</p>
+<ul>
+<li>newer and smaller SSTables are successively merged into older and larger SSTables</li>
+</ul>
+</li>
+<li>
+<p>Leveled compaction</p>
+<ul>
+<li>key range is split into smaller SSTables and older data is moved into seperate levels - allow the compaction to proceed more incrementally and use less disk space</li>
+</ul>
+</li>
+</ul>
+<h3 id="b-trees">
+  B-Trees
+  <a class="anchor" href="#b-trees">#</a>
+</h3>
+<p>The most widely ised indexing structure</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#hash-indexes">Hash Indexes</a>
+      <ul>
+        <li><a href="#in-memory-hash-mapeg-bitcask">In memory hash map(e.g. bitcask)</a></li>
+      </ul>
+    </li>
+    <li><a href="#sstables-and-lsm-trees">SSTables and LSM-Trees</a>
+      <ul>
+        <li><a href="#sstables">SSTables</a></li>
+        <li><a href="#lsm-tree">LSM-Tree</a></li>
+        <li><a href="#b-trees">B-Trees</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
