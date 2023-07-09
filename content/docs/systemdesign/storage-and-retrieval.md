@@ -48,3 +48,42 @@ draft: true
   * Hash table must fit in memory
   * Range queries are not efficient - e.g. scaning over all keys between kitty00000 and kitty99999
 
+## SSTables and LSM-Trees
+
+### SSTables
+* Definiation: the sequence pf key-value pairs is **sorted by key**
+* Pros
+  * Merging segment is simple and efficient(merge-sort)
+  * No longer need to keep an index of all keys in memory to find a particular key in the file
+    * Keep an in-memory index with offsets for **some of keys** - sparse since key is sorted
+    * Sorted segment on the disk can be compressed before writing into the disk(save disk space & reduce the I/O bandwidth)
+
+#### Constructing and maintaing SSTables
+* Maintaing it in the memory with tree structure ->(e.g. red-black tree or AVL tree)
+  * insert it in any order and read them in a sorted order
+
+* How it works
+  * write comes in --> add it into an in-memory balanced tree data structure(called memtable)
+  * memtable gets bigger than threshold(a few MB) --> write into disk as SSTable
+  * serve a read request --> in memotable ->most recent on-disk segment --> next older segment
+  * run merging and compaction process in the background & discard overwritten or deleted values
+
+* what happened if db crashes
+  * Keep a separate log on disk to which every write is immediately appended
+
+
+### LSM-Tree
+* Log-Structured Merge Tree(LSM tree): keeping a cascade of SSTables that are merged in the background
+* LST tree can be slow when looking up keys that do not exist in the db
+  * Using **Bloom filters** to solve it - a memory-efficient data structure for approximating the contents pf a set
+  * Tell you if a key is in the db - save many unnecessary disk reads for nonexistent keys
+
+* Size-tiered compaction
+  * newer and smaller SSTables are successively merged into older and larger SSTables
+
+* Leveled compaction
+  * key range is split into smaller SSTables and older data is moved into seperate levels - allow the compaction to proceed more incrementally and use less disk space
+
+
+### B-Trees
+The most widely ised indexing structure
