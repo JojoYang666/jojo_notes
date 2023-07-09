@@ -87,3 +87,14 @@ draft: true
 
 ### B-Trees
 The most widely ised indexing structure
+
+* Features
+  * key-value pairs sorted by key
+  * break the db down into **fixed-size** blocks or pages -- traditionally 4KB in size
+  * write or read one page at a time
+  * page identified by address/location - write into the **disk**
+  * Example
+{{< expand "Example of B Trees" "..." >}}
+## Markdown content
+[Looking up a key using a B-tree index](/Users/yangtian/Documents/gitRepo/jojo_notes/content/docs/systemdesign/images/looking_up_a_key_using_b_tree.png)
+{{< /expand >}}
