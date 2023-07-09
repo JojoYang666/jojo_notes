@@ -95,6 +95,26 @@ The most widely ised indexing structure
   * page identified by address/location - write into the **disk**
   * Example
 {{< expand "Example of B Trees" "..." >}}
-## Markdown content
 ![Looking up a key using a B-tree index](../images/looking_up_a_key_using_b_tree.png)
 {{< /expand >}}
+
+  * Most db can fit into B tree that is 3 or 4 levels deep(e.h. 4 level tree of 4KB pages with a branching factor of 500 can store up to 256 TB)
+
+* Reliable
+  * overwrite a page on disk with new data
+  * crashes for the case of -> insert new data & over full,  then need to spilt page into 2 half full pages(multi steps)
+  * Additional structure on disk needed: write-ahead log(WAL, redo log)
+    * append-only file  - every B-tree modification must be written before it can be applied to the page of the tree it self
+  * Concurrency control - solved by **latches**(lightweight locks)
+
+
+* B-tree optimizations
+  * Use copy-on-write scheme
+    * modified page is written to a different location & a new version of the parent pages in the tree is created, pointing at the new location
+    * Useful for the concurrenty control
+    * Abbreviating key to save the space and increase the branching factors
+      * Especially for the pages on the interior of the key
+    * Additional pointers added to the tree(e.g. leaf page with pointers to their sibling)
+    * Log structured ideas to reduce disk seeks
+
+

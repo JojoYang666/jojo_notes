@@ -16,7 +16,7 @@
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.962126072e08bf3065d3641628832e45bfb2d22f0f7cdebb1cf568253f7bc461.js" integrity="sha256-liEmBy4IvzBl02QWKIMuRb&#43;y0i8PfN67HPVoJT97xGE=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.dcfa0f89865397004d62eb6729f3892d8fb5706604c3ad3f8d7ac259c6027e1f.js" integrity="sha256-3PoPiYZTlwBNYutnKfOJLY&#43;1cGYEw60/jXrCWcYCfh8=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -629,13 +629,23 @@ https://github.com/alex-shpak/hugo-book
 </h3>
 <p>The most widely ised indexing structure</p>
 <ul>
-<li>Features
+<li>
+<p>Features</p>
 <ul>
-<li>key-value pairs sorted by key</li>
-<li>break the db down into <strong>fixed-size</strong> blocks or pages &ndash; traditionally 4KB in size</li>
-<li>write or read one page at a time</li>
-<li>page identified by address/location - write into the <strong>disk</strong></li>
-<li>Example
+<li>
+<p>key-value pairs sorted by key</p>
+</li>
+<li>
+<p>break the db down into <strong>fixed-size</strong> blocks or pages &ndash; traditionally 4KB in size</p>
+</li>
+<li>
+<p>write or read one page at a time</p>
+</li>
+<li>
+<p>page identified by address/location - write into the <strong>disk</strong></p>
+</li>
+<li>
+<p>Example
 
 <div class="book-expand">
   <label>
@@ -645,14 +655,45 @@ https://github.com/alex-shpak/hugo-book
     </div>
     <input type="checkbox" class="hidden" />
     <div class="book-expand-content markdown-inner">
-      <h2 id="markdown-content">
-  Markdown content
-  <a class="anchor" href="#markdown-content">#</a>
-</h2>
-<p><img src="../images/looking_up_a_key_using_b_tree.png" alt="Looking up a key using a B-tree index" />
+      <img src="../images/looking_up_a_key_using_b_tree.png" alt="Looking up a key using a B-tree index" />
     </div>
   </label>
 </div>
+</p>
+</li>
+<li>
+<p>Most db can fit into B tree that is 3 or 4 levels deep(e.h. 4 level tree of 4KB pages with a branching factor of 500 can store up to 256 TB)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Reliable</p>
+<ul>
+<li>overwrite a page on disk with new data</li>
+<li>crashes for the case of -&gt; insert new data &amp; over full,  then need to spilt page into 2 half full pages(multi steps)</li>
+<li>Additional structure on disk needed: write-ahead log(WAL, redo log)
+<ul>
+<li>append-only file  - every B-tree modification must be written before it can be applied to the page of the tree it self</li>
+</ul>
+</li>
+<li>Concurrency control - solved by <strong>latches</strong>(lightweight locks)</li>
+</ul>
+</li>
+<li>
+<p>B-tree optimizations</p>
+<ul>
+<li>Use copy-on-write scheme
+<ul>
+<li>modified page is written to a different location &amp; a new version of the parent pages in the tree is created, pointing at the new location</li>
+<li>Useful for the concurrenty control</li>
+<li>Abbreviating key to save the space and increase the branching factors
+<ul>
+<li>Especially for the pages on the interior of the key</li>
+</ul>
+</li>
+<li>Additional pointers added to the tree(e.g. leaf page with pointers to their sibling)</li>
+<li>Log structured ideas to reduce disk seeks</li>
+</ul>
 </li>
 </ul>
 </li>
