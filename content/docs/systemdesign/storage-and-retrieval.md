@@ -96,5 +96,5 @@ The most widely ised indexing structure
   * Example
 {{< expand "Example of B Trees" "..." >}}
 ## Markdown content
-[Looking up a key using a B-tree index](/Users/yangtian/Documents/gitRepo/jojo_notes/content/docs/systemdesign/images/looking_up_a_key_using_b_tree.png)
+[Looking up a key using a B-tree index](../images/looking_up_a_key_using_b_tree.png)
 {{< /expand >}}
