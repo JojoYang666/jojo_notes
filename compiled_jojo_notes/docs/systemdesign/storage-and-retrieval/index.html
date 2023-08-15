@@ -16,7 +16,7 @@
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.dcfa0f89865397004d62eb6729f3892d8fb5706604c3ad3f8d7ac259c6027e1f.js" integrity="sha256-3PoPiYZTlwBNYutnKfOJLY&#43;1cGYEw60/jXrCWcYCfh8=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.5c883e4a7f60afc83f126379d6e54c373bf8f57f5eb7b42939d745da4d68809e.js" integrity="sha256-XIg&#43;Sn9gr8g/EmN51uVMNzv49X9et7QpOddF2k1ogJ4=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -444,6 +444,12 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#sstables">SSTables</a></li>
         <li><a href="#lsm-tree">LSM-Tree</a></li>
         <li><a href="#b-trees">B-Trees</a></li>
+        <li><a href="#comparison-between-lst-trees-and-b-trees">Comparison between LST trees and B-trees</a></li>
+      </ul>
+    </li>
+    <li><a href="#other-indexing-structures">Other indexing structures</a>
+      <ul>
+        <li><a href="#storing-values-within-the-index">Storing values within the index</a></li>
       </ul>
     </li>
   </ul>
@@ -698,6 +704,100 @@ https://github.com/alex-shpak/hugo-book
 </ul>
 </li>
 </ul>
+<h3 id="comparison-between-lst-trees-and-b-trees">
+  Comparison between LST trees and B-trees
+  <a class="anchor" href="#comparison-between-lst-trees-and-b-trees">#</a>
+</h3>
+<ol>
+<li>
+<p>Write amplication: write to the db resulting in multiple writes to the disk over the course of the db&rsquo;s lifetime</p>
+<ol>
+<li>write amplication is a particulat concerns on SSDs, which can only overwrite blocks as limited number of times before wearing out</li>
+<li>write amplication a direct performance cost for a write-heavy application</li>
+</ol>
+</li>
+<li>
+<p>LSM:</p>
+<ol>
+<li>Pros
+<ol>
+<li>higher write throughput than B trees</li>
+<li>can be compressed better, thue produce smaller files than B trees(because of fragmentation on B trees - page split when a row cnnot fit into an existing page)</li>
+</ol>
+</li>
+<li>Cons
+<ol>
+<li>compaction process can sometimes interfere with the performance of the ongoing reads and writes
+<ol>
+<li>explicit monitoring is needed</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>Pros of B-trees</p>
+<ol>
+<li>Each key exists in exactly one place in the index, wheres a log structured storage engine may have multiple copies of the same key in different segments
+<ol>
+<li>good for offering strong transactional semantics</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="other-indexing-structures">
+  Other indexing structures
+  <a class="anchor" href="#other-indexing-structures">#</a>
+</h2>
+<p>Secondary indexes</p>
+<ul>
+<li>Not unique, can be solved in the ways below
+<ul>
+<li>Making each value in the index a list of matching row identifiers</li>
+<li>makeing each key unique by appending a row identifier to it</li>
+</ul>
+</li>
+</ul>
+<h3 id="storing-values-within-the-index">
+  Storing values within the index
+  <a class="anchor" href="#storing-values-within-the-index">#</a>
+</h3>
+<ul>
+<li>Value of the query key can be two things below
+<ul>
+<li>the actual vertex</li>
+<li>a reference to the row stored elsewhere
+<ul>
+<li><strong>heap file</strong>: the place where rows are stored
+<ul>
+<li>avoids duplicating data when multiple secondary indexes are present</li>
+<li>efficient when updating value without changing key</li>
+<li>will be complicated if the new valueis larger, two possible ways listed below
+<ul>
+<li>all indexes need to be updated to point at the new heap location of the record</li>
+<li>forwarding pointer is left behind in the old heap location</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>clustered index</strong>:
+<ul>
+<li>store the indexed row directly within an index</li>
+<li>why not heap file: the extra hop from the index to the heap file is too much of a performance penalty for reads</li>
+</ul>
+</li>
+<li>both clustered index and heap file can speed up reads
+<ul>
+<li>additional storage required and add overhead on writes</li>
+</ul>
+</li>
+</ul>
 </article>
  
       
@@ -749,6 +849,12 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#sstables">SSTables</a></li>
         <li><a href="#lsm-tree">LSM-Tree</a></li>
         <li><a href="#b-trees">B-Trees</a></li>
+        <li><a href="#comparison-between-lst-trees-and-b-trees">Comparison between LST trees and B-trees</a></li>
+      </ul>
+    </li>
+    <li><a href="#other-indexing-structures">Other indexing structures</a>
+      <ul>
+        <li><a href="#storing-values-within-the-index">Storing values within the index</a></li>
       </ul>
     </li>
   </ul>
