@@ -117,4 +117,43 @@ The most widely ised indexing structure
     * Additional pointers added to the tree(e.g. leaf page with pointers to their sibling)
     * Log structured ideas to reduce disk seeks
 
+### Comparison between LST trees and B-trees
+1. Write amplication: write to the db resulting in multiple writes to the disk over the course of the db's lifetime
+   1. write amplication is a particulat concerns on SSDs, which can only overwrite blocks as limited number of times before wearing out
+   2. write amplication a direct performance cost for a write-heavy application
+2. LSM:
+   1. Pros
+      1. higher write throughput than B trees
+      2. can be compressed better, thue produce smaller files than B trees(because of fragmentation on B trees - page split when a row cnnot fit into an existing page)
+   2. Cons
+      1.  compaction process can sometimes interfere with the performance of the ongoing reads and writes
+          1.  explicit monitoring is needed
+
+3. Pros of B-trees
+   1. Each key exists in exactly one place in the index, wheres a log structured storage engine may have multiple copies of the same key in different segments
+      1. good for offering strong transactional semantics
+
+
+## Other indexing structures
+Secondary indexes
+  * Not unique, can be solved in the ways below
+    * Making each value in the index a list of matching row identifiers
+    * makeing each key unique by appending a row identifier to it
+
+### Storing values within the index
+* Value of the query key can be two things below
+  * the actual vertex
+  * a reference to the row stored elsewhere
+    * **heap file**: the place where rows are stored
+      * avoids duplicating data when multiple secondary indexes are present
+      * efficient when updating value without changing key
+      * will be complicated if the new valueis larger, two possible ways listed below
+        * all indexes need to be updated to point at the new heap location of the record
+        * forwarding pointer is left behind in the old heap location
+* **clustered index**:
+  * store the indexed row directly within an index
+  * why not heap file: the extra hop from the index to the heap file is too much of a performance penalty for reads
+* both clustered index and heap file can speed up reads
+  * additional storage required and add overhead on writes
+  
 
