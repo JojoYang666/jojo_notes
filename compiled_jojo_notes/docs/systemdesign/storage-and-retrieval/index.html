@@ -16,7 +16,7 @@
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.5c883e4a7f60afc83f126379d6e54c373bf8f57f5eb7b42939d745da4d68809e.js" integrity="sha256-XIg&#43;Sn9gr8g/EmN51uVMNzv49X9et7QpOddF2k1ogJ4=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.4a3e9b89a73ca2c793e81199d3fec4fb882a32e24b42456db59316af9e98b9b4.js" integrity="sha256-Sj6biac8oseT6BGZ0/7E&#43;4gqMuJLQkVttZMWr56YubQ=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -767,8 +767,11 @@ https://github.com/alex-shpak/hugo-book
 <ul>
 <li>Value of the query key can be two things below
 <ul>
-<li>the actual vertex</li>
-<li>a reference to the row stored elsewhere
+<li>
+<p>the actual vertex</p>
+</li>
+<li>
+<p>a reference to the row stored elsewhere</p>
 <ul>
 <li><strong>heap file</strong>: the place where rows are stored
 <ul>
@@ -782,10 +785,6 @@ https://github.com/alex-shpak/hugo-book
 </li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
-</li>
 <li><strong>clustered index</strong>:
 <ul>
 <li>store the indexed row directly within an index</li>
@@ -795,6 +794,27 @@ https://github.com/alex-shpak/hugo-book
 <li>both clustered index and heap file can speed up reads
 <ul>
 <li>additional storage required and add overhead on writes</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Multi-column indexes</p>
+<ul>
+<li>Query multiple columns of a table simultaneously</li>
+<li>concatenated index: combines several fields into one key &ndash; e.g. old fashioned paper phone book</li>
+<li>one use case: querying geospatial data - query map within a rectangular
+<ul>
+<li>two options
+<ul>
+<li>two dimensional location into a single number using <strong>spacing-filing curve</strong></li>
+<li>R-trees -&gt; spatial indexes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
