@@ -150,10 +150,18 @@ Secondary indexes
       * will be complicated if the new valueis larger, two possible ways listed below
         * all indexes need to be updated to point at the new heap location of the record
         * forwarding pointer is left behind in the old heap location
-* **clustered index**:
-  * store the indexed row directly within an index
-  * why not heap file: the extra hop from the index to the heap file is too much of a performance penalty for reads
-* both clustered index and heap file can speed up reads
-  * additional storage required and add overhead on writes
+    * **clustered index**:
+      * store the indexed row directly within an index
+      * why not heap file: the extra hop from the index to the heap file is too much of a performance penalty for reads
+    * both clustered index and heap file can speed up reads
+      * additional storage required and add overhead on writes
+
+  * Multi-column indexes
+    * Query multiple columns of a table simultaneously
+    * concatenated index: combines several fields into one key -- e.g. old fashioned paper phone book
+    * one use case: querying geospatial data - query map within a rectangular
+      * two options
+        * two dimensional location into a single number using **spacing-filing curve** 
+        * R-trees -> spatial indexes
   
 
