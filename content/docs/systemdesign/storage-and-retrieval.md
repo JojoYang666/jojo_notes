@@ -163,5 +163,85 @@ Secondary indexes
       * two options
         * two dimensional location into a single number using **spacing-filing curve** 
         * R-trees -> spatial indexes
+  * fuzzy search
+    * aka similar search,(fault tolerant)
+
+## Keeping everything in memory
+* some Key-value stores - intended fo caching use only
+  * acceptable for data to be lost if a mahinne is restarted
+*  in memory db aim for durability
+   *  using special hardware
+   *  writing a log of changes to disk
+   *  writing periodic snapshots to disk
+   *  replicating the in memory state to other machines
+   *  writing to disk as append only logs
+
+* the advantage of in-memory databases
+  * performance: avoid the overheads of encoding in memory data structure in a form that can be written to disk
+  * providing the data models that are difficult to implement with disk-based db
+
+##Transaction processiong or Analytics
+{{< tabs "transaction_procesing" >}}
+
+{{< tab "Data Warehousing" >}}
+# Data Warehousing
+* seperate database that analysts can query to their hearts content whithout affectng OLTP operations
+* extracted from OLP db(using data dump or continous stream of updates)
+* extract-transformed-load(etl): data from OLTP to OLAP
+* can be optimized for analytic access pattern
+
+## Stars and Snowflakes: Scchemas for analytics
+
+* star schema/dimensional modeling
+  * fact tables
+  * each row in the fact table represents as an event
+  * other tables called dimension tables
+    * the dimensions represent: who, what, where, when, how & why of the vent
+  * the fact table is in the middle & surroundd by its dimension tables -- like star
+
+* snowflake schema
+  * a variation of the star schma
+  * dimensions are further broken into subdimensions
+  * star schemas oftn prefrred since it's easy to work with
+
+fact table & dimension table are often wide in general
+
+{{< /tab >}}
+
+{{< tab "Column-Oriented Storage" >}}
+
+# Column-Oriented Storage
+Query data with trillions of rows & pretabytes of data is challengeing
+
+* Most OLTPm storage is laid out in a *row-oriented* fashion
+  * all the value from one row of a table are stored next to each other
+
+* column-oriented storage
+  * do not store all values from one row together, but store all values from each column together instead
+  * cntaining the rows in the same order
+
+## Column Compression
+
+### Bitmap encoding
+* the number of distinct values in a column is small compared to the number of rows
+* Take a column with n distinct values and turn it into n seperate bitmaps
+  * one bitmap for each distinct value with one bit for each row
+  * the bit is 1 if the row has that value and 0 if not
+* if n is very small --> those bitmaps can be stored one bit per row
+* if n is bigger, there will be lots of 0s in most of bitmaps
+  * bit map can be additionally run length encoded
+
+### Memory bandwidth and vectorized processing
+
+* bottleneck of the data warehouse is:
+  * getting data from disk into memory
+  * using bandwidth from main memory into the cpu cache
+  * avoiding branch mispredications
+  * bubbles in the CPU instruction processing pipeline
+  * making use of single-instruction–multi-data(SIMD) instructions in modern CPUs
+* vertorized processing
+  * a central processing unit (CPU) that implements an instruction set where its instructions are designed to operate efficiently and effectively on large one-dimensional arrays of data called vectors(compressed column data)
   
+{{< /tab >}}
+{{< /tabs >}}
 
