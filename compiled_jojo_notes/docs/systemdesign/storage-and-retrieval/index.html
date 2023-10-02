@@ -16,7 +16,7 @@
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.4a3e9b89a73ca2c793e81199d3fec4fb882a32e24b42456db59316af9e98b9b4.js" integrity="sha256-Sj6biac8oseT6BGZ0/7E&#43;4gqMuJLQkVttZMWr56YubQ=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.102b887a623598d194df4e0c49d85a96f08caf2f82237a0680c78ab7ff7b1e5e.js" integrity="sha256-ECuIemI1mNGU304MSdhalvCMry&#43;CI3oGgMeKt/97Hl4=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -452,6 +452,7 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#storing-values-within-the-index">Storing values within the index</a></li>
       </ul>
     </li>
+    <li><a href="#keeping-everything-in-memory">Keeping everything in memory</a></li>
   </ul>
 </nav>
 
@@ -815,9 +816,156 @@ https://github.com/alex-shpak/hugo-book
 </li>
 </ul>
 </li>
+<li>
+<p>fuzzy search</p>
+<ul>
+<li>aka similar search,(fault tolerant)</li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+<h2 id="keeping-everything-in-memory">
+  Keeping everything in memory
+  <a class="anchor" href="#keeping-everything-in-memory">#</a>
+</h2>
+<ul>
+<li>
+<p>some Key-value stores - intended fo caching use only</p>
+<ul>
+<li>acceptable for data to be lost if a mahinne is restarted</li>
+</ul>
+</li>
+<li>
+<p>in memory db aim for durability</p>
+<ul>
+<li>using special hardware</li>
+<li>writing a log of changes to disk</li>
+<li>writing periodic snapshots to disk</li>
+<li>replicating the in memory state to other machines</li>
+<li>writing to disk as append only logs</li>
+</ul>
+</li>
+<li>
+<p>the advantage of in-memory databases</p>
+<ul>
+<li>performance: avoid the overheads of encoding in memory data structure in a form that can be written to disk</li>
+<li>providing the data models that are difficult to implement with disk-based db</li>
+</ul>
+</li>
+</ul>
+<p>##Transaction processiong or Analytics
+
+
+
+
+<div class="book-tabs"><input type="radio" class="toggle" name="tabs-transaction_procesing" id="tabs-transaction_procesing-0" checked="checked" />
+  <label for="tabs-transaction_procesing-0">Data Warehousing</label>
+  <div class="book-tabs-content markdown-inner"><h1 id="data-warehousing">
+  Data Warehousing
+  <a class="anchor" href="#data-warehousing">#</a>
+</h1>
+<ul>
+<li>seperate database that analysts can query to their hearts content whithout affectng OLTP operations</li>
+<li>extracted from OLP db(using data dump or continous stream of updates)</li>
+<li>extract-transformed-load(etl): data from OLTP to OLAP</li>
+<li>can be optimized for analytic access pattern</li>
+</ul>
+<h2 id="stars-and-snowflakes-scchemas-for-analytics">
+  Stars and Snowflakes: Scchemas for analytics
+  <a class="anchor" href="#stars-and-snowflakes-scchemas-for-analytics">#</a>
+</h2>
+<ul>
+<li>
+<p>star schema/dimensional modeling</p>
+<ul>
+<li>fact tables</li>
+<li>each row in the fact table represents as an event</li>
+<li>other tables called dimension tables
+<ul>
+<li>the dimensions represent: who, what, where, when, how &amp; why of the vent</li>
+</ul>
+</li>
+<li>the fact table is in the middle &amp; surroundd by its dimension tables &ndash; like star</li>
+</ul>
+</li>
+<li>
+<p>snowflake schema</p>
+<ul>
+<li>a variation of the star schma</li>
+<li>dimensions are further broken into subdimensions</li>
+<li>star schemas oftn prefrred since it&rsquo;s easy to work with</li>
+</ul>
+</li>
+</ul>
+<p>fact table &amp; dimension table are often wide in general</p>
+</div><input type="radio" class="toggle" name="tabs-transaction_procesing" id="tabs-transaction_procesing-1"  />
+  <label for="tabs-transaction_procesing-1">Column-Oriented Storage</label>
+  <div class="book-tabs-content markdown-inner"><h1 id="column-oriented-storage">
+  Column-Oriented Storage
+  <a class="anchor" href="#column-oriented-storage">#</a>
+</h1>
+<p>Query data with trillions of rows &amp; pretabytes of data is challengeing</p>
+<ul>
+<li>
+<p>Most OLTPm storage is laid out in a <em>row-oriented</em> fashion</p>
+<ul>
+<li>all the value from one row of a table are stored next to each other</li>
+</ul>
+</li>
+<li>
+<p>column-oriented storage</p>
+<ul>
+<li>do not store all values from one row together, but store all values from each column together instead</li>
+<li>cntaining the rows in the same order</li>
+</ul>
+</li>
+</ul>
+<h2 id="column-compression">
+  Column Compression
+  <a class="anchor" href="#column-compression">#</a>
+</h2>
+<h3 id="bitmap-encoding">
+  Bitmap encoding
+  <a class="anchor" href="#bitmap-encoding">#</a>
+</h3>
+<ul>
+<li>the number of distinct values in a column is small compared to the number of rows</li>
+<li>Take a column with n distinct values and turn it into n seperate bitmaps
+<ul>
+<li>one bitmap for each distinct value with one bit for each row</li>
+<li>the bit is 1 if the row has that value and 0 if not</li>
+</ul>
+</li>
+<li>if n is very small &ndash;&gt; those bitmaps can be stored one bit per row</li>
+<li>if n is bigger, there will be lots of 0s in most of bitmaps
+<ul>
+<li>bit map can be additionally run length encoded</li>
+</ul>
+</li>
+</ul>
+<h3 id="memory-bandwidth-and-vectorized-processing">
+  Memory bandwidth and vectorized processing
+  <a class="anchor" href="#memory-bandwidth-and-vectorized-processing">#</a>
+</h3>
+<ul>
+<li>bottleneck of the data warehouse is:
+<ul>
+<li>getting data from disk into memory</li>
+<li>using bandwidth from main memory into the cpu cache</li>
+<li>avoiding branch mispredications</li>
+<li>bubbles in the CPU instruction processing pipeline</li>
+<li>making use of single-instruction–multi-data(SIMD) instructions in modern CPUs</li>
+</ul>
+</li>
+<li>vertorized processing
+<ul>
+<li>a central processing unit (CPU) that implements an instruction set where its instructions are designed to operate efficiently and effectively on large one-dimensional arrays of data called vectors(compressed column data)</li>
+</ul>
+</li>
+</ul>
+</div></div>
+</p>
 </article>
  
       
@@ -877,6 +1025,7 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#storing-values-within-the-index">Storing values within the index</a></li>
       </ul>
     </li>
+    <li><a href="#keeping-everything-in-memory">Keeping everything in memory</a></li>
   </ul>
 </nav>
 
