@@ -180,7 +180,7 @@ Secondary indexes
   * performance: avoid the overheads of encoding in memory data structure in a form that can be written to disk
   * providing the data models that are difficult to implement with disk-based db
 
-##Transaction processiong or Analytics
+## Transaction processiong or Analytics
 {{< tabs "transaction_procesing" >}}
 
 {{< tab "Data Warehousing" >}}
@@ -241,7 +241,18 @@ Query data with trillions of rows & pretabytes of data is challengeing
   * making use of single-instruction–multi-data(SIMD) instructions in modern CPUs
 * vertorized processing
   * a central processing unit (CPU) that implements an instruction set where its instructions are designed to operate efficiently and effectively on large one-dimensional arrays of data called vectors(compressed column data)
-  
+
+### Sort Order in Column Storage
+* Sort rows first and then extract column storage
+* sorted order will help compress data
+* sort the same data in several different ways
+  * Data needs to be replicated to multiple machines anyway
+
+### Aggregation: Data Cubes and Materialized Views
+* Materialized view
+  * Actual copy of results from frequently used queries which have much aggregation operations
+  * one special case is known as data cube / OLAP cube
+  * faster to query but less flexibility
 {{< /tab >}}
 {{< /tabs >}}
 
