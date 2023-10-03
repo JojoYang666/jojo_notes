@@ -16,7 +16,7 @@
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.102b887a623598d194df4e0c49d85a96f08caf2f82237a0680c78ab7ff7b1e5e.js" integrity="sha256-ECuIemI1mNGU304MSdhalvCMry&#43;CI3oGgMeKt/97Hl4=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.c822ac2b29e5b1e371e119b332416fcb4bbbcf14684bab2cd876265ac2f62ad2.js" integrity="sha256-yCKsKynlseNx4RmzMkFvy0u7zxRoS6ss2HYmWsL2KtI=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -453,6 +453,7 @@ https://github.com/alex-shpak/hugo-book
       </ul>
     </li>
     <li><a href="#keeping-everything-in-memory">Keeping everything in memory</a></li>
+    <li><a href="#transaction-processiong-or-analytics">Transaction processiong or Analytics</a></li>
   </ul>
 </nav>
 
@@ -854,7 +855,10 @@ https://github.com/alex-shpak/hugo-book
 </ul>
 </li>
 </ul>
-<p>##Transaction processiong or Analytics
+<h2 id="transaction-processiong-or-analytics">
+  Transaction processiong or Analytics
+  <a class="anchor" href="#transaction-processiong-or-analytics">#</a>
+</h2>
 
 
 
@@ -964,8 +968,34 @@ https://github.com/alex-shpak/hugo-book
 </ul>
 </li>
 </ul>
+<h3 id="sort-order-in-column-storage">
+  Sort Order in Column Storage
+  <a class="anchor" href="#sort-order-in-column-storage">#</a>
+</h3>
+<ul>
+<li>Sort rows first and then extract column storage</li>
+<li>sorted order will help compress data</li>
+<li>sort the same data in several different ways
+<ul>
+<li>Data needs to be replicated to multiple machines anyway</li>
+</ul>
+</li>
+</ul>
+<h3 id="aggregation-data-cubes-and-materialized-views">
+  Aggregation: Data Cubes and Materialized Views
+  <a class="anchor" href="#aggregation-data-cubes-and-materialized-views">#</a>
+</h3>
+<ul>
+<li>Materialized view
+<ul>
+<li>Actual copy of results from frequently used queries which have much aggregation operations</li>
+<li>one special case is known as data cube / OLAP cube</li>
+<li>faster to query but less flexibility</li>
+</ul>
+</li>
+</ul>
 </div></div>
-</p>
+
 </article>
  
       
@@ -1026,6 +1056,7 @@ https://github.com/alex-shpak/hugo-book
       </ul>
     </li>
     <li><a href="#keeping-everything-in-memory">Keeping everything in memory</a></li>
+    <li><a href="#transaction-processiong-or-analytics">Transaction processiong or Analytics</a></li>
   </ul>
 </nav>
 
