@@ -3,22 +3,19 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Buttons # Buttons are styled links that can lead to local page or external link.
-Example # {{&lt; button relref=&#34;/&#34; [class=&#34;...&#34;] &gt;}}Get Home{{&lt; /button &gt;}} {{&lt; button href=&#34;https://github.com/alex-shpak/hugo-book&#34; &gt;}}Contribute{{&lt; /button &gt;}} Get Home Contribute https://themes.gohugo.io/themes/hugo-book/#requirements">
+<meta name="description" content=" Encoding and Evolution # Backward compatibility Newer code can read data that was written by older code. Forward compatibility Older code can read data that was wriiten by newer code. Formats for Encoding Data Formats for Encoding Data # Working with data in 2 different representations: Memory: data is kept in obkects, structs, list, etc which are optimized for effiicient access and manipulation by the CPU(typically using pointers) Write data to a file or send it over the network -&gt; encode it as some kind of self-contained sequence of bytes Thus: encoding/serialization/marshalling &ndash;&gt; in-memory representation to a byte sequence decoding/parsing/deserialization/unmarshalling &ndash;&gt; byte sequence -&gt; in-memory representation ">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
-<meta property="og:description" content="Buttons # Buttons are styled links that can lead to local page or external link.
-Example # {{&lt; button relref=&#34;/&#34; [class=&#34;...&#34;] &gt;}}Get Home{{&lt; /button &gt;}} {{&lt; button href=&#34;https://github.com/alex-shpak/hugo-book&#34; &gt;}}Contribute{{&lt; /button &gt;}} Get Home Contribute https://themes.gohugo.io/themes/hugo-book/#requirements" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="http://jojoyang.site/jojo_notes/docs/shortcodes/buttons/" /><meta property="article:section" content="docs" />
-
-
-<title>Buttons | My New Hugo Site</title>
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://jojoyang.site/jojo_notes/docs/systemdesign/encodingandevolution/" />
+<title>Encoding and Evolution | My New Hugo Site</title>
 <link rel="manifest" href="/jojo_notes/manifest.json">
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
   <script defer src="/jojo_notes/en.search.min.e2cd5f149a27d49981308c80dfd3126cadf6bfb40fecee069f6597b082b8dba7.js" integrity="sha256-4s1fFJon1JmBMIyA39MSbK32v7QP7O4Gn2WXsIK426c=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://jojoyang.site/jojo_notes/docs/systemdesign/encodingandevolution/index.xml" title="My New Hugo Site" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -197,7 +194,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/jojo_notes/docs/shortcodes/buttons/" class="active">Buttons</a>
+    <a href="/jojo_notes/docs/shortcodes/buttons/" class="">Buttons</a>
   
 
         </li>
@@ -420,7 +417,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/jojo_notes/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>Buttons</strong>
+  <strong>Encoding and Evolution</strong>
 
   <label for="toc-control">
     
@@ -434,11 +431,7 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#example">Example</a></li>
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
 
 
 
@@ -449,39 +442,35 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h1 id="buttons">
-  Buttons
-  <a class="anchor" href="#buttons">#</a>
+  <article class="markdown"><h1 id="encoding-and-evolution">
+  Encoding and Evolution
+  <a class="anchor" href="#encoding-and-evolution">#</a>
 </h1>
-<p>Buttons are styled links that can lead to local page or external link.</p>
-<h2 id="example">
-  Example
-  <a class="anchor" href="#example">#</a>
-</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tpl" data-lang="tpl"><span style="display:flex;"><span><span style="color:#75715e">{{</span><span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">button</span> <span style="color:#a6e22e">relref</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">[</span><span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;...&#34;</span><span style="color:#f92672">]</span> <span style="color:#f92672">&gt;</span><span style="color:#75715e">}}</span>Get Home<span style="color:#75715e">{{</span><span style="color:#f92672">&lt;</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">button</span> <span style="color:#f92672">&gt;</span><span style="color:#75715e">}}</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">{{</span><span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">button</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://github.com/alex-shpak/hugo-book&#34;</span> <span style="color:#f92672">&gt;</span><span style="color:#75715e">}}</span>Contribute<span style="color:#75715e">{{</span><span style="color:#f92672">&lt;</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">button</span> <span style="color:#f92672">&gt;</span><span style="color:#75715e">}}</span>
-</span></span></code></pre></div><p>
+<ul>
+<li>Backward compatibility
+<ul>
+<li>Newer code can read data that was written by older code.</li>
+</ul>
+</li>
+<li>Forward compatibility
+<ul>
+<li>Older code can read data that was wriiten by newer code.</li>
+</ul>
+</li>
+</ul>
+<dl>
 
+  <dt>
+    <a href="/jojo_notes/docs/systemdesign/encodingandevolution/formats_for_encoding_data/">Formats for Encoding Data</a>
+  </dt>
+  <dd class="markdown-inner">
+     Formats for Encoding Data # Working with data in 2 different representations:
+Memory: data is kept in obkects, structs, list, etc which are optimized for effiicient access and manipulation by the CPU(typically using pointers) Write data to a file or send it over the network -&gt; encode it as some kind of self-contained sequence of bytes Thus:
+encoding/serialization/marshalling &ndash;&gt; in-memory representation to a byte sequence decoding/parsing/deserialization/unmarshalling &ndash;&gt; byte sequence -&gt; in-memory representation 
+  </dd>
 
+</dl>
 
-  
-
-<a  href="/jojo_notes/"   class="book-btn">
-  Get Home
-</a>
-
-
-
-
-  
-  
-
-
-<a  href="https://github.com/alex-shpak/hugo-book"   target="_blank" rel="noopener"  class="book-btn">
-  Contribute
-</a>
-
-<a href="https://themes.gohugo.io/themes/hugo-book/#requirements">https://themes.gohugo.io/themes/hugo-book/#requirements</a></p>
 </article>
  
       
@@ -521,11 +510,7 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#example">Example</a></li>
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
 
 
  

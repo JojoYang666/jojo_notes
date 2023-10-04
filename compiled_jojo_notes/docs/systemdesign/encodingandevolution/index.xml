@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My New Hugo Site</title>
+    <link>http://jojoyang.site/jojo_notes/docs/systemdesign/encodingandevolution/</link>
+    <description>Recent content on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="http://jojoyang.site/jojo_notes/docs/systemdesign/encodingandevolution/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>http://jojoyang.site/jojo_notes/docs/systemdesign/encodingandevolution/formats_for_encoding_data/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://jojoyang.site/jojo_notes/docs/systemdesign/encodingandevolution/formats_for_encoding_data/</guid>
+      <description> Formats for Encoding Data # Working with data in 2 different representations:
+Memory: data is kept in obkects, structs, list, etc which are optimized for effiicient access and manipulation by the CPU(typically using pointers) Write data to a file or send it over the network -&amp;gt; encode it as some kind of self-contained sequence of bytes Thus:
+encoding/serialization/marshalling &amp;ndash;&amp;gt; in-memory representation to a byte sequence decoding/parsing/deserialization/unmarshalling &amp;ndash;&amp;gt; byte sequence -&amp;gt; in-memory representation </description>
+    </item>
+    
+  </channel>
+</rss>
