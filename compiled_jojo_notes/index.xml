@@ -211,9 +211,9 @@ Lorem markdownum insigne. Olympo signis Delphis!</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://jojoyang.site/jojo_notes/docs/systemdesign/encodingandevolution/formats_for_encoding_data/</guid>
-      <description> Formats for Encoding Data # Working with data in 2 different representations:
+      <description>Formats for Encoding Data # Working with data in 2 different representations:
 Memory: data is kept in obkects, structs, list, etc which are optimized for effiicient access and manipulation by the CPU(typically using pointers) Write data to a file or send it over the network -&amp;gt; encode it as some kind of self-contained sequence of bytes Thus:
-encoding/serialization/marshalling &amp;ndash;&amp;gt; in-memory representation to a byte sequence decoding/parsing/deserialization/unmarshalling &amp;ndash;&amp;gt; byte sequence -&amp;gt; in-memory representation </description>
+encoding/serialization/marshalling &amp;ndash;&amp;gt; in-memory representation to a byte sequence decoding/parsing/deserialization/unmarshalling &amp;ndash;&amp;gt; byte sequence -&amp;gt; in-memory representation Language-specific Formats # Using programming languages&amp;rsquo;s built-in support for encoding.</description>
     </item>
     
     <item>
