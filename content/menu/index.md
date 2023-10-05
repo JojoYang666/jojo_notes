@@ -21,7 +21,7 @@ headless: true
 - [Tabs]({{< relref "/docs/shortcodes/tabs" >}})
 <br />
 
-- **System Design**
+- [**System Design**]({{< relref "/docs/systemdesign" >}})
 - [Data Models & query languages]({{< relref "/docs/systemdesign/data-models-and-query-languages" >}})
 - [Storage & Retrieval]({{< relref "/docs/systemdesign/storage-and-retrieval" >}})
 <br />
