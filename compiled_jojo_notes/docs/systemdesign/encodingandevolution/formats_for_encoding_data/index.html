@@ -20,7 +20,7 @@ encoding/serialization/marshalling &ndash;&gt; in-memory representation to a byt
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.c0373e4f84f6fcf8ba443c30b9f3bdd5643134c9ea1970c46ade42df4218a9fb.js" integrity="sha256-wDc&#43;T4T2/Pi6RDwwufO91WQxNMnqGXDEat5C30IYqfs=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.50c68a410b95433478ba67ab2a8036807b762029a28b8baa40ed0fc029a682fd.js" integrity="sha256-UMaKQQuVQzR4umerKoA2gHt2ICmii4uqQO0PwCmmgv0=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -490,7 +490,11 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#language-specific-formats">Language-specific Formats</a></li>
+    <li><a href="#language-specific-formats">Language-specific Formats</a>
+      <ul>
+        <li><a href="#binary-encoding">Binary encoding</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -529,6 +533,23 @@ https://github.com/alex-shpak/hugo-book
 <li>Efficiency</li>
 </ul>
 <p><strong>Bad idea to use language built-in encoding for anything other than very transient purposes.</strong></p>
+<h3 id="binary-encoding">
+  Binary encoding
+  <a class="anchor" href="#binary-encoding">#</a>
+</h3>
+<p>Take JSON format as an example which need a few bytes
+{
+&ldquo;userName&rdquo;: &ldquo;Martin&rdquo;,
+&ldquo;favoirateNumber&rdquo;: 1234
+&ldquo;interests&rdquo;: [&ldquo;daydreaming&rdquo;, &ldquo;hacking]
+}</p>
+<ul>
+<li>first byte indicates what follows is an object with x fields</li>
+<li>second byte indicaes that what follows is a string with x bytes long</li>
+<li>the next x bytes are the field name in ASCII</li>
+<li>the next y bytes encode the 6 letters - Martin</li>
+</ul>
+<p>The binary encoding is 66 bytes long which is only a little less than the 81 bytes taken by the textual JSON encoding.</p>
 </article>
  
       
@@ -570,7 +591,11 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#language-specific-formats">Language-specific Formats</a></li>
+    <li><a href="#language-specific-formats">Language-specific Formats</a>
+      <ul>
+        <li><a href="#binary-encoding">Binary encoding</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
