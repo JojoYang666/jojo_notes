@@ -20,7 +20,7 @@ encoding/serialization/marshalling &ndash;&gt; in-memory representation to a byt
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.50c68a410b95433478ba67ab2a8036807b762029a28b8baa40ed0fc029a682fd.js" integrity="sha256-UMaKQQuVQzR4umerKoA2gHt2ICmii4uqQO0PwCmmgv0=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.60890dff90f3a37ee5f176bf625ebaeae6ed78bfbebfa11d74ef0046ea126619.js" integrity="sha256-YIkN/5Dzo37l8Xa/Yl666ubteL&#43;&#43;v6EddO8ARuoSZhk=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -495,6 +495,11 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#binary-encoding">Binary encoding</a></li>
       </ul>
     </li>
+    <li><a href="#thrift-and-protocol-buffers">Thrift and Protocol Buffers</a>
+      <ul>
+        <li><a href="#field-tags-and-schema-evolution">Field tags and schema evolution</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -550,6 +555,48 @@ https://github.com/alex-shpak/hugo-book
 <li>the next y bytes encode the 6 letters - Martin</li>
 </ul>
 <p>The binary encoding is 66 bytes long which is only a little less than the 81 bytes taken by the textual JSON encoding.</p>
+<h2 id="thrift-and-protocol-buffers">
+  Thrift and Protocol Buffers
+  <a class="anchor" href="#thrift-and-protocol-buffers">#</a>
+</h2>
+<ul>
+<li>Come with a code generation tool that takes a schema definition  &amp; produces classes that implement schema in various programming languages</li>
+<li>Thrift
+<ul>
+<li>BinaryProtocol
+<ul>
+<li>No field name and use field flag instead</li>
+</ul>
+</li>
+<li>CompactProtocol
+<ul>
+<li>Packing the field type &amp; tag number into a sigle byte</li>
+<li>Using variable length integers</li>
+<li>Bigger numbers use more bytes</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Protocol Buffers
+<ul>
+<li>only has one binary encoding format</li>
+<li>have optional &amp; required for the field
+<ul>
+<li>No difference to how the field is encoded</li>
+<li><code>required</code> enables a run time check that fails if the field is not set</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="field-tags-and-schema-evolution">
+  Field tags and schema evolution
+  <a class="anchor" href="#field-tags-and-schema-evolution">#</a>
+</h3>
+<ol>
+<li>Field&rsquo;s tag cannot be changed since it will make all existing encoded data invalid</li>
+<li></li>
+</ol>
 </article>
  
       
@@ -594,6 +641,11 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#language-specific-formats">Language-specific Formats</a>
       <ul>
         <li><a href="#binary-encoding">Binary encoding</a></li>
+      </ul>
+    </li>
+    <li><a href="#thrift-and-protocol-buffers">Thrift and Protocol Buffers</a>
+      <ul>
+        <li><a href="#field-tags-and-schema-evolution">Field tags and schema evolution</a></li>
       </ul>
     </li>
   </ul>
