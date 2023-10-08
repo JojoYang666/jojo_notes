@@ -31,3 +31,22 @@ Take JSON format as an example which need a few bytes
 * the next y bytes encode the 6 letters - Martin
 
 The binary encoding is 66 bytes long which is only a little less than the 81 bytes taken by the textual JSON encoding.
+
+## Thrift and Protocol Buffers
+* Come with a code generation tool that takes a schema definition  & produces classes that implement schema in various programming languages
+* Thrift
+  * BinaryProtocol
+    * No field name and use field flag instead
+  * CompactProtocol
+    * Packing the field type & tag number into a sigle byte
+    * Using variable length integers
+    * Bigger numbers use more bytes
+* Protocol Buffers
+  * only has one binary encoding format
+  * have optional & required for the field
+    * No difference to how the field is encoded
+    * `required` enables a run time check that fails if the field is not set
+
+### Field tags and schema evolution
+1. Field's tag cannot be changed since it will make all existing encoded data invalid
+2. 
