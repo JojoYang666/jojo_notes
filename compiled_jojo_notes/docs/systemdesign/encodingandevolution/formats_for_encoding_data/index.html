@@ -20,7 +20,7 @@ encoding/serialization/marshalling &ndash;&gt; in-memory representation to a byt
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.60890dff90f3a37ee5f176bf625ebaeae6ed78bfbebfa11d74ef0046ea126619.js" integrity="sha256-YIkN/5Dzo37l8Xa/Yl666ubteL&#43;&#43;v6EddO8ARuoSZhk=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.b9955c5cc8a4fd93a0a14987028d54902c51384a63ab6df4b67836307d840c54.js" integrity="sha256-uZVcXMik/ZOgoUmHAo1UkCxROEpjq230tng2MH2EDFQ=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -498,6 +498,7 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#thrift-and-protocol-buffers">Thrift and Protocol Buffers</a>
       <ul>
         <li><a href="#field-tags-and-schema-evolution">Field tags and schema evolution</a></li>
+        <li><a href="#datatypes-and-schema-evolution">Datatypes and schema evolution</a></li>
       </ul>
     </li>
   </ul>
@@ -595,8 +596,51 @@ https://github.com/alex-shpak/hugo-book
 </h3>
 <ol>
 <li>Field&rsquo;s tag cannot be changed since it will make all existing encoded data invalid</li>
-<li></li>
+<li>Forward compatibility
+<ol>
+<li>when old code(which does not know about the new tag numbers you added) tries to read data written by new code, including a new field with a tag number it does not recognize &ndash;&gt; it can simply ignore that field
+<ol>
+<li>the annotation allows the parser to determine how many bytes it needs to skip</li>
 </ol>
+</li>
+</ol>
+</li>
+<li>backward compatibility
+<ol>
+<li>new code can always read old data -&gt; because the tag numbers still have the same meaning</li>
+<li>every field you add after the inital deployment of the schema must be optional or have a default value</li>
+</ol>
+</li>
+<li>Removing a field is just like adding a field
+<ol>
+<li>only remove a field that is optional</li>
+<li>can never use the same tag number again</li>
+</ol>
+</li>
+</ol>
+<h3 id="datatypes-and-schema-evolution">
+  Datatypes and schema evolution
+  <a class="anchor" href="#datatypes-and-schema-evolution">#</a>
+</h3>
+<ul>
+<li>It&rsquo;s possible to change the datatype of a field
+<ul>
+<li>there is a risk that values will lose precision or get truncated</li>
+</ul>
+</li>
+<li>Protocol buffers - does not have a list or array datatype(using repeated instead)
+<ul>
+<li>encoding of a repeated field - the same field tag simply appears multiple times in the record</li>
+<li>ok to change an optional to repeated - new code reading old data sees a list list with 0 or 1 element</li>
+<li>old code reading new data sees only <strong>the last element of the list</strong></li>
+</ul>
+</li>
+<li>Thrift  - does not allow the same evolution from the single values to mulyi-valued as protocol buffers
+<ul>
+<li>but it has the advantage of supporting nested lists</li>
+</ul>
+</li>
+</ul>
 </article>
  
       
@@ -646,6 +690,7 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#thrift-and-protocol-buffers">Thrift and Protocol Buffers</a>
       <ul>
         <li><a href="#field-tags-and-schema-evolution">Field tags and schema evolution</a></li>
+        <li><a href="#datatypes-and-schema-evolution">Datatypes and schema evolution</a></li>
       </ul>
     </li>
   </ul>
