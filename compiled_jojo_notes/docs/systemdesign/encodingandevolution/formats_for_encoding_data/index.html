@@ -20,7 +20,7 @@ encoding/serialization/marshalling &ndash;&gt; in-memory representation to a byt
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.b9955c5cc8a4fd93a0a14987028d54902c51384a63ab6df4b67836307d840c54.js" integrity="sha256-uZVcXMik/ZOgoUmHAo1UkCxROEpjq230tng2MH2EDFQ=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.256cf173fc972a61aea6d58febe90562acb362588b41dbb3a79f7906d99e2204.js" integrity="sha256-JWzxc/yXKmGuptWP6&#43;kFYqyzYliLQduzp595BtmeIgQ=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -501,6 +501,15 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#datatypes-and-schema-evolution">Datatypes and schema evolution</a></li>
       </ul>
     </li>
+    <li><a href="#avro">Avro</a>
+      <ul>
+        <li><a href="#the-witers-schema-and-the-reades-schema">The witer&rsquo;s schema and the reade&rsquo;s schema</a></li>
+        <li><a href="#schema-evolution-rules">Schema evolution rules</a></li>
+        <li><a href="#whats-the-writers-schema">What&rsquo;s the writer&rsquo;s schema</a></li>
+      </ul>
+    </li>
+    <li><a href="#dynamically-generated-schemas">Dynamically generated schemas</a></li>
+    <li><a href="#code-generation-and-dynamically-typed-languages">Code generation and dynamically typed languages</a></li>
   </ul>
 </nav>
 
@@ -598,7 +607,7 @@ https://github.com/alex-shpak/hugo-book
 <li>Field&rsquo;s tag cannot be changed since it will make all existing encoded data invalid</li>
 <li>Forward compatibility
 <ol>
-<li>when old code(which does not know about the new tag numbers you added) tries to read data written by new code, including a new field with a tag number it does not recognize &ndash;&gt; it can simply ignore that field
+<li>when old code(which does not know about the new tag numbers you added) tries to read data written by new code, including a new field with a tag number it does not recognize &ndash;&gt; it caan simply ignore that field
 <ol>
 <li>the annotation allows the parser to determine how many bytes it needs to skip</li>
 </ol>
@@ -638,6 +647,158 @@ https://github.com/alex-shpak/hugo-book
 <li>Thrift  - does not allow the same evolution from the single values to mulyi-valued as protocol buffers
 <ul>
 <li>but it has the advantage of supporting nested lists</li>
+</ul>
+</li>
+</ul>
+<h2 id="avro">
+  Avro
+  <a class="anchor" href="#avro">#</a>
+</h2>
+<ul>
+<li>Has two schema languages about the structure of the data being encoded
+<ul>
+<li>Avro intended fpr human editing</li>
+<li>based on JSON which is more easily machine-readable</li>
+</ul>
+</li>
+<li>there is nothing to identify fields or their types
+<ul>
+<li>to parse the binary data, need to go through the fields in the order that they appear in the schema</li>
+<li>and then use the schema to tell the datatype of each field.</li>
+<li>the binary data can only be decoded correrctly if the code reading the data is using <strong>exact same schema</strong> as the code tha wrote the data</li>
+</ul>
+</li>
+</ul>
+<h3 id="the-witers-schema-and-the-reades-schema">
+  The witer&rsquo;s schema and the reade&rsquo;s schema
+  <a class="anchor" href="#the-witers-schema-and-the-reades-schema">#</a>
+</h3>
+<ul>
+<li>writer&rsquo;s schema: encode the data using whatever version of the schema it knons about</li>
+<li>reader&rsquo;s schema: decode the satta</li>
+<li>the writer&rsquo;s schema don&rsquo;t have to be the same - need to be compatible
+<ul>
+<li>e.g. schemas do not have to be in the same order</li>
+</ul>
+</li>
+<li>If the code reading the data encounters a field that appears in the writer&rsquo;s schema but not in the reader&rsquo;s schema -&gt; just ignored it</li>
+<li>If the code reading data expecting some field but the writer&rsquo;s schema does not contain a field of that name -&gt; filled with a default value declared in the reader&rsquo;s schema</li>
+</ul>
+<h3 id="schema-evolution-rules">
+  Schema evolution rules
+  <a class="anchor" href="#schema-evolution-rules">#</a>
+</h3>
+<ul>
+<li>Default value is necessary for maintaing the forward compatibity and backward compatibility</li>
+<li>In some programming languages, null is an acceptable default value for any variable
+<ul>
+<li>but this is not the case in avro
+<ul>
+<li>if you want to allow a field to be null, you have to use a union type -&gt; e.g. {null long, string} indicates that field can be number, string or nu,
+<ul>
+<li>it&rsquo;s a little bit verbose but it helps prevent bugs by being explicit about what can and cannot be null</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="whats-the-writers-schema">
+  What&rsquo;s the writer&rsquo;s schema
+  <a class="anchor" href="#whats-the-writers-schema">#</a>
+</h3>
+<p>Avro&rsquo;s use case</p>
+<h4 id="large-file-with-lots-of-records">
+  Large file with lots of records
+  <a class="anchor" href="#large-file-with-lots-of-records">#</a>
+</h4>
+<ul>
+<li>Especially in the context of Hadoop - for storing a large file containing millions of records, all encoded with the same schema.</li>
+<li>the writer of that file can just indicate the writer&rsquo;s schema at the beginning of the file</li>
+</ul>
+<h4 id="database-with-individually-written-records">
+  Database with individually written records
+  <a class="anchor" href="#database-with-individually-written-records">#</a>
+</h4>
+<ul>
+<li>In db, different records may be written at the different points in time using different writer&rsquo;s schema
+<ul>
+<li>the simplest solution for it:
+<ul>
+<li>include a version number at the begining of every encoded record</li>
+<li>keep a list of schema versions in db</li>
+<li>A reader can fetch a record -&gt; extract the version number -&gt; featch writer&rsquo;s schema for the version number from the db</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="sending-records-over-a-network-connection">
+  Sending records over a network connection
+  <a class="anchor" href="#sending-records-over-a-network-connection">#</a>
+</h4>
+<ul>
+<li>Two processes are communuicating over a bidirectional network connection -&gt; negotiate the schema version on connection setup and then use that schema for the lifetime of the connection.(e.g. rpc, rest API)</li>
+</ul>
+<h2 id="dynamically-generated-schemas">
+  Dynamically generated schemas
+  <a class="anchor" href="#dynamically-generated-schemas">#</a>
+</h2>
+<ul>
+<li>
+<p>Advantage of the Avro&rsquo;s approach - does not contain any tag numbers</p>
+<ul>
+<li>Friendlier to dynamically generated schemas
+<ul>
+<li>Have a relational db whose contents we want to dump to a file</li>
+<li>using Avro, it can be easuly generate an avro schema and encode it using that schema, then dumping it into Avro obhect container file</li>
+<li>Generate a record schema for each db table -&gt; each column becomes a field in that record -&gt; the column name in the db maps to the field name in Avro</li>
+<li>If db schema changess -&gt; genrate a new schema from the updated db schema &amp; export data in the new avro schema
+<ul>
+<li>since the fields are identified by name,  the updated writer&rsquo;s schema can stil be matched up with the old reader&rsquo;s schema</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>However, if using the protocol buffers/thrift for the same example above</p>
+<ul>
+<li>the field tags would likely have to be assigned by hand/or some automation scripts which need to carefully handled
+<ul>
+<li><strong>everytime the db schema changes, the mapping from db column names to the field tags need to be updated</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="code-generation-and-dynamically-typed-languages">
+  Code generation and dynamically typed languages
+  <a class="anchor" href="#code-generation-and-dynamically-typed-languages">#</a>
+</h2>
+<ul>
+<li>
+<p>Thrift/Protocol Buffers</p>
+<ul>
+<li>generate code that implements this schema in a programming language</li>
+<li>it is useful in a statically typed languages e.g. java, C+ or C#(with the compilation step)
+<ul>
+<li>allows efficient in memory structures to be used for decoded data</li>
+<li>allows type checking and autocompletion in IDEs whien writing programs that acchess the data structure</li>
+</ul>
+</li>
+<li>for dynamically typed programming languages (e.g. js, Ruby, Python) -&gt; meanless for generating code because of no compilation type</li>
+</ul>
+</li>
+<li>
+<p>Avro provides optional code generation for code generation because it works well without any code generation</p>
+</li>
+<li>
+<p>The schema is a self-describing since it contails all the necessary metadata</p>
+<ul>
+<li>especially usefil in conjunction with dynamically typed data processing languages</li>
 </ul>
 </li>
 </ul>
@@ -693,6 +854,15 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#datatypes-and-schema-evolution">Datatypes and schema evolution</a></li>
       </ul>
     </li>
+    <li><a href="#avro">Avro</a>
+      <ul>
+        <li><a href="#the-witers-schema-and-the-reades-schema">The witer&rsquo;s schema and the reade&rsquo;s schema</a></li>
+        <li><a href="#schema-evolution-rules">Schema evolution rules</a></li>
+        <li><a href="#whats-the-writers-schema">What&rsquo;s the writer&rsquo;s schema</a></li>
+      </ul>
+    </li>
+    <li><a href="#dynamically-generated-schemas">Dynamically generated schemas</a></li>
+    <li><a href="#code-generation-and-dynamically-typed-languages">Code generation and dynamically typed languages</a></li>
   </ul>
 </nav>
 
