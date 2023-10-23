@@ -17,5 +17,15 @@ Memory: data is kept in obkects, structs, list, etc which are optimized for effi
 encoding/serialization/marshalling &amp;ndash;&amp;gt; in-memory representation to a byte sequence decoding/parsing/deserialization/unmarshalling &amp;ndash;&amp;gt; byte sequence -&amp;gt; in-memory representation Language-specific Formats # Using programming languages&amp;rsquo;s built-in support for encoding.</description>
     </item>
     
+    <item>
+      <title></title>
+      <link>http://jojoyang.site/jojo_notes/docs/systemdesign/encodingandevolution/modes_of_dataflow/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://jojoyang.site/jojo_notes/docs/systemdesign/encodingandevolution/modes_of_dataflow/</guid>
+      <description> Modes of Dataflow # Illurstrate more about who encodes data and who decodes it.
+Daraflow through Databases # Store someting in the database as sending a message to your future self Common for several different processes to be accessing a db at the sametime </description>
+    </item>
+    
   </channel>
 </rss>
