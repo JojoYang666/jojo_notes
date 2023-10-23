@@ -109,7 +109,7 @@ Avro's use case
 #### Sending records over a network connection
 * Two processes are communuicating over a bidirectional network connection -> negotiate the schema version on connection setup and then use that schema for the lifetime of the connection.(e.g. rpc, rest API)
 
-## Dynamically generated schemas
+#### Dynamically generated schemas
 * Advantage of the Avro's approach - does not contain any tag numbers
   * Friendlier to dynamically generated schemas
     * Have a relational db whose contents we want to dump to a file
