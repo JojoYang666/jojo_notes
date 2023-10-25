@@ -23,3 +23,34 @@ Illurstrate more about who encodes data and who decodes it.
   * servers expose an API over the newwork
   * clients can connect to the servers to make request to that API
   * the API exposed by the server is known as a service
+
+* A server can itself be a cliennt to another service
+  * ofen used to decompose a larger applicaton into smaller services by area of funtionalitu
+  * this way of building applications called **service oriented architectuure(SOA)**/**microservices architecture**
+  * Expect old and new versions of servers and clients to be running at the same time -> data encoding used by servers and clients must be compatible across versions of the service API
+
+### Web services
+* Using HTTP as underlying protocol for talking to service
+* there are 2 popular approaches to web services
+  * Rest
+    * emphasizes simple data formats
+    * popularity on the context of cross-organizational service integration
+    * often assoicated with microservices
+  * Soap
+    * Web services description language/WSDL
+    * useful in statically typed programming langages
+
+### The problems with remote procedure calls(RPC)
+* Remote procedure call(RPC): Make a request to a remote nework service look the same as calling a function or method in your programming language within the same process
+* A network request is very different from a local function call
+  * A network request is unpredicatable(e.g. request/response may be lost) while a local function call is  either sucess of fails
+  * A local function call either return a result, throw an exception or never returns while  network request has another possible outcome - return without a result due to a timeout
+  * if you retry a failed network request, it could happen that the request are actually getting through and only the responnses are lost
+  * A network request is much slower than a function call and its latency is also wildly variable
+  * when making network request, all those parameters need to be encoded into a sequence of bytes that can be sent over the network
+  * the client and service may be implemented in different programming languages so RPC framework must translate datypes from one language into another
+
+### Current directions for RPC
+* service discovery - allowing a client to find out at which IP address and port number it can find a particular service.
+* RPC protocoals with a binary encoding format provides bterrer performance than something generic like JSON over REST
+* RPC framework is on requests between services owned by the smae organization typically within same datacenter
