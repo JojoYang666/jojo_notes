@@ -18,7 +18,7 @@ Daraflow through Databases # Store someting in the database as sending a message
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.1fd113ba27c18269f698cdfb51c09ebbf6c2a1f1971c351e91fffbd42c074da3.js" integrity="sha256-H9ETuifBgmn2mM37UcCeu/bCofGXHDUekf/71CwHTaM=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.eaf99cef3d0f7cdd3134bf6874fe2fdd7db2c83314b44d9a7712424811db184a.js" integrity="sha256-6vmc7z0PfN0xNL9odP4v3X2yyDMUtE2adxJCSBHbGEo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -506,7 +506,13 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#different-values-written-at-different-times">Different values written at different times</a></li>
       </ul>
     </li>
-    <li><a href="#dataflow-through-services-rest-and-rpc">Dataflow Through Services: Rest and RPC</a></li>
+    <li><a href="#dataflow-through-services-rest-and-rpc">Dataflow Through Services: Rest and RPC</a>
+      <ul>
+        <li><a href="#web-services">Web services</a></li>
+        <li><a href="#the-problems-with-remote-procedure-callsrpc">The problems with remote procedure calls(RPC)</a></li>
+        <li><a href="#current-directions-for-rpc">Current directions for RPC</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -573,13 +579,72 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#dataflow-through-services-rest-and-rpc">#</a>
 </h2>
 <ul>
-<li>The most common arrangement: clients and servers
+<li>
+<p>The most common arrangement: clients and servers</p>
 <ul>
 <li>servers expose an API over the newwork</li>
 <li>clients can connect to the servers to make request to that API</li>
 <li>the API exposed by the server is known as a service</li>
 </ul>
 </li>
+<li>
+<p>A server can itself be a cliennt to another service</p>
+<ul>
+<li>ofen used to decompose a larger applicaton into smaller services by area of funtionalitu</li>
+<li>this way of building applications called <strong>service oriented architectuure(SOA)</strong>/<strong>microservices architecture</strong></li>
+<li>Expect old and new versions of servers and clients to be running at the same time -&gt; data encoding used by servers and clients must be compatible across versions of the service API</li>
+</ul>
+</li>
+</ul>
+<h3 id="web-services">
+  Web services
+  <a class="anchor" href="#web-services">#</a>
+</h3>
+<ul>
+<li>Using HTTP as underlying protocol for talking to service</li>
+<li>there are 2 popular approaches to web services
+<ul>
+<li>Rest
+<ul>
+<li>emphasizes simple data formats</li>
+<li>popularity on the context of cross-organizational service integration</li>
+<li>often assoicated with microservices</li>
+</ul>
+</li>
+<li>Soap
+<ul>
+<li>Web services description language/WSDL</li>
+<li>useful in statically typed programming langages</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="the-problems-with-remote-procedure-callsrpc">
+  The problems with remote procedure calls(RPC)
+  <a class="anchor" href="#the-problems-with-remote-procedure-callsrpc">#</a>
+</h3>
+<ul>
+<li>Remote procedure call(RPC): Make a request to a remote nework service look the same as calling a function or method in your programming language within the same process</li>
+<li>A network request is very different from a local function call
+<ul>
+<li>A network request is unpredicatable(e.g. request/response may be lost) while a local function call is  either sucess of fails</li>
+<li>A local function call either return a result, throw an exception or never returns while  network request has another possible outcome - return without a result due to a timeout</li>
+<li>if you retry a failed network request, it could happen that the request are actually getting through and only the responnses are lost</li>
+<li>A network request is much slower than a function call and its latency is also wildly variable</li>
+<li>when making network request, all those parameters need to be encoded into a sequence of bytes that can be sent over the network</li>
+<li>the client and service may be implemented in different programming languages so RPC framework must translate datypes from one language into another</li>
+</ul>
+</li>
+</ul>
+<h3 id="current-directions-for-rpc">
+  Current directions for RPC
+  <a class="anchor" href="#current-directions-for-rpc">#</a>
+</h3>
+<ul>
+<li>service discovery - allowing a client to find out at which IP address and port number it can find a particular service.</li>
+<li>RPC protocoals with a binary encoding format provides bterrer performance than something generic like JSON over REST</li>
+<li>RPC framework is on requests between services owned by the smae organization typically within same datacenter</li>
 </ul>
 </article>
  
@@ -627,7 +692,13 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#different-values-written-at-different-times">Different values written at different times</a></li>
       </ul>
     </li>
-    <li><a href="#dataflow-through-services-rest-and-rpc">Dataflow Through Services: Rest and RPC</a></li>
+    <li><a href="#dataflow-through-services-rest-and-rpc">Dataflow Through Services: Rest and RPC</a>
+      <ul>
+        <li><a href="#web-services">Web services</a></li>
+        <li><a href="#the-problems-with-remote-procedure-callsrpc">The problems with remote procedure calls(RPC)</a></li>
+        <li><a href="#current-directions-for-rpc">Current directions for RPC</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
