@@ -54,3 +54,8 @@ Illurstrate more about who encodes data and who decodes it.
 * service discovery - allowing a client to find out at which IP address and port number it can find a particular service.
 * RPC protocoals with a binary encoding format provides bterrer performance than something generic like JSON over REST
 * RPC framework is on requests between services owned by the smae organization typically within same datacenter
+
+### Data encoding and evolution for RPC
+* Reasonable assume that all the services will be updated first and all the clients second
+  * need backward compatibilty on request
+  * forward compatibility on response
