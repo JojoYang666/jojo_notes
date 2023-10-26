@@ -59,3 +59,37 @@ Illurstrate more about who encodes data and who decodes it.
 * Reasonable assume that all the services will be updated first and all the clients second
   * need backward compatibilty on request
   * forward compatibility on response
+* The provider of a service often has no control over its clients and cannot force them to upgrade
+  * If a compatibility-breaking change is required, the service provider often ends up maintaining multiple versions of the service API side by side
+  * Service use API keys to identify a particular client/store a client's requested API version on the server and to allow this version selection to be updated through a seperate administrative interface.
+
+
+## Message-Passing Dataflow
+* Message broker/message queue/message-oriented middleware
+  * an intermediary computer program module that translates a message from the formal messaging protocol of the sender to the formal messaging protocol of the receiver.
+  * Advantages
+    * Act as a buffer if the recipient is unavailable or overloaded and thus improve system reliability
+    * automatically redeliver messages to a process that has crashed and thus prevent messages from being lost
+    * avpids the sender needing to know the IP address and port number of the recipient
+    * allow one message to be sent to several recipients
+    * logically decouples the sender from the recipient
+* Difference compared to RPC - the message-passing communication is ususally one-way
+
+### Message brokers
+* Message brokers are used as follows
+  * one process sends a message to a named queue or topic
+  * broker ensures that the message is delivered to one or more consumers of our subscribers to that queue or topic
+  * topic provides only one way dataflow
+  * a consumer may itself publish messages to another topic
+  * if a consumer republishes messages to another topic, may need to be careful to reserve unknown fields to prevent the data lost
+
+
+### Distributed actor frameworks
+* Actor model
+  * programming model for concurrency in a single process
+  * logic is encapsulate in actors
+    * each actor represents one client or entity which may have some local state(which is not shared with any other actor)
+    * it communicates with other actors by sending and receiving asynchronuous messages
+
+* distributed actor frameworks
+  * this programming model is used to scale an application across multiple nodes
