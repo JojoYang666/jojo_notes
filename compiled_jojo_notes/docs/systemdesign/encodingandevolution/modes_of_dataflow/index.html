@@ -18,7 +18,7 @@ Daraflow through Databases # Store someting in the database as sending a message
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.0b80773998eb883081ed519a7162b9ea2fa79e45c1ee1455bb6399ba8d61b5e3.js" integrity="sha256-C4B3OZjriDCB7VGacWK56i&#43;nnkXB7hRVu2OZuo1hteM=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.fd693504ec1f2acb0d4ccaf6707938b2addff6b0f6db482aa994e8207c6c0199.js" integrity="sha256-/Wk1BOwfKssNTMr2cHk4sq3f9rD220gqqZToIHxsAZk=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -514,6 +514,12 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#data-encoding-and-evolution-for-rpc">Data encoding and evolution for RPC</a></li>
       </ul>
     </li>
+    <li><a href="#message-passing-dataflow">Message-Passing Dataflow</a>
+      <ul>
+        <li><a href="#message-brokers">Message brokers</a></li>
+        <li><a href="#distributed-actor-frameworks">Distributed actor frameworks</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -658,6 +664,72 @@ https://github.com/alex-shpak/hugo-book
 <li>forward compatibility on response</li>
 </ul>
 </li>
+<li>The provider of a service often has no control over its clients and cannot force them to upgrade
+<ul>
+<li>If a compatibility-breaking change is required, the service provider often ends up maintaining multiple versions of the service API side by side</li>
+<li>Service use API keys to identify a particular client/store a client&rsquo;s requested API version on the server and to allow this version selection to be updated through a seperate administrative interface.</li>
+</ul>
+</li>
+</ul>
+<h2 id="message-passing-dataflow">
+  Message-Passing Dataflow
+  <a class="anchor" href="#message-passing-dataflow">#</a>
+</h2>
+<ul>
+<li>Message broker/message queue/message-oriented middleware
+<ul>
+<li>an intermediary computer program module that translates a message from the formal messaging protocol of the sender to the formal messaging protocol of the receiver.</li>
+<li>Advantages
+<ul>
+<li>Act as a buffer if the recipient is unavailable or overloaded and thus improve system reliability</li>
+<li>automatically redeliver messages to a process that has crashed and thus prevent messages from being lost</li>
+<li>avpids the sender needing to know the IP address and port number of the recipient</li>
+<li>allow one message to be sent to several recipients</li>
+<li>logically decouples the sender from the recipient</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Difference compared to RPC - the message-passing communication is ususally one-way</li>
+</ul>
+<h3 id="message-brokers">
+  Message brokers
+  <a class="anchor" href="#message-brokers">#</a>
+</h3>
+<ul>
+<li>Message brokers are used as follows
+<ul>
+<li>one process sends a message to a named queue or topic</li>
+<li>broker ensures that the message is delivered to one or more consumers of our subscribers to that queue or topic</li>
+<li>topic provides only one way dataflow</li>
+<li>a consumer may itself publish messages to another topic</li>
+<li>if a consumer republishes messages to another topic, may need to be careful to reserve unknown fields to prevent the data lost</li>
+</ul>
+</li>
+</ul>
+<h3 id="distributed-actor-frameworks">
+  Distributed actor frameworks
+  <a class="anchor" href="#distributed-actor-frameworks">#</a>
+</h3>
+<ul>
+<li>
+<p>Actor model</p>
+<ul>
+<li>programming model for concurrency in a single process</li>
+<li>logic is encapsulate in actors
+<ul>
+<li>each actor represents one client or entity which may have some local state(which is not shared with any other actor)</li>
+<li>it communicates with other actors by sending and receiving asynchronuous messages</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>distributed actor frameworks</p>
+<ul>
+<li>this programming model is used to scale an application across multiple nodes</li>
+</ul>
+</li>
 </ul>
 </article>
  
@@ -711,6 +783,12 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#the-problems-with-remote-procedure-callsrpc">The problems with remote procedure calls(RPC)</a></li>
         <li><a href="#current-directions-for-rpc">Current directions for RPC</a></li>
         <li><a href="#data-encoding-and-evolution-for-rpc">Data encoding and evolution for RPC</a></li>
+      </ul>
+    </li>
+    <li><a href="#message-passing-dataflow">Message-Passing Dataflow</a>
+      <ul>
+        <li><a href="#message-brokers">Message brokers</a></li>
+        <li><a href="#distributed-actor-frameworks">Distributed actor frameworks</a></li>
       </ul>
     </li>
   </ul>
