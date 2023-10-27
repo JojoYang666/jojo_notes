@@ -3,22 +3,19 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="4th Level of Menu # Caesorum illa tu sentit micat vestes papyriferi # Inde aderam facti; Theseus vis de tauri illa peream. Oculos uberaque non regisque vobis cursuque, opus venit quam vulnera. Et maiora necemque, lege modo; gestanda nitidi, vero? Dum ne pectoraque testantur.
-Venasque repulsa Samos qui, exspectatum eram animosque hinc, aut manes, Assyrii. Cupiens auctoribus pariter rubet, profana magni super nocens. Vos ius sibilat inpar turba visae iusto!">
+<meta name="description" content=" Replication # Why we need replication # keep the data geographically close to your users and reduce the latency increase availability scale out the number of machines so that serve read queries &amp; increase read throughput Leaders and Followers ">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
-<meta property="og:description" content="4th Level of Menu # Caesorum illa tu sentit micat vestes papyriferi # Inde aderam facti; Theseus vis de tauri illa peream. Oculos uberaque non regisque vobis cursuque, opus venit quam vulnera. Et maiora necemque, lege modo; gestanda nitidi, vero? Dum ne pectoraque testantur.
-Venasque repulsa Samos qui, exspectatum eram animosque hinc, aut manes, Assyrii. Cupiens auctoribus pariter rubet, profana magni super nocens. Vos ius sibilat inpar turba visae iusto!" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="http://jojoyang.site/jojo_notes/docs/example/collapsed/3rd-level/4th-level/" /><meta property="article:section" content="docs" />
-
-
-<title>4th Level | My New Hugo Site</title>
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://jojoyang.site/jojo_notes/docs/systemdesign/replication/" />
+<title>Replication | My New Hugo Site</title>
 <link rel="manifest" href="/jojo_notes/manifest.json">
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
   <script defer src="/jojo_notes/en.search.min.d7dd79d9268808c1c88f2bf206f85cb3d3346d7a9148c8e274483a9b0b6c7663.js" integrity="sha256-19152SaICMHIjyvyBvhcs9M0bXqRSMjidEg6mwtsdmM=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://jojoyang.site/jojo_notes/docs/systemdesign/replication/index.xml" title="My New Hugo Site" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -127,7 +124,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <input type="checkbox" id="section-4e46b01272d410b3a99461d79326ddf4" class="toggle" checked />
+    <input type="checkbox" id="section-4e46b01272d410b3a99461d79326ddf4" class="toggle"  />
     <label for="section-4e46b01272d410b3a99461d79326ddf4" class="flex justify-between">
       <a role="button" class="">Collapsed</a>
     </label>
@@ -156,7 +153,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/jojo_notes/docs/example/collapsed/3rd-level/4th-level/" class="active">4th Level</a>
+    <a href="/jojo_notes/docs/example/collapsed/3rd-level/4th-level/" class="">4th Level</a>
   
 
         </li>
@@ -426,9 +423,9 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <input type="checkbox" id="section-fc0b57a80927aa25e065437e5f684e02" class="toggle"  />
+    <input type="checkbox" id="section-fc0b57a80927aa25e065437e5f684e02" class="toggle" checked />
     <label for="section-fc0b57a80927aa25e065437e5f684e02" class="flex justify-between">
-      <a href="/jojo_notes/docs/systemdesign/replication/" class="">Replication</a>
+      <a href="/jojo_notes/docs/systemdesign/replication/" class="active">Replication</a>
     </label>
   
 
@@ -508,7 +505,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/jojo_notes/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>4th Level</strong>
+  <strong>Replication</strong>
 
   <label for="toc-control">
     
@@ -522,11 +519,7 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#caesorum-illa-tu-sentit-micat-vestes-papyriferi">Caesorum illa tu sentit micat vestes papyriferi</a></li>
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
 
 
 
@@ -537,21 +530,30 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h1 id="4th-level-of-menu">
-  4th Level of Menu
-  <a class="anchor" href="#4th-level-of-menu">#</a>
+  <article class="markdown"><h1 id="replication">
+  Replication
+  <a class="anchor" href="#replication">#</a>
 </h1>
-<h2 id="caesorum-illa-tu-sentit-micat-vestes-papyriferi">
-  Caesorum illa tu sentit micat vestes papyriferi
-  <a class="anchor" href="#caesorum-illa-tu-sentit-micat-vestes-papyriferi">#</a>
-</h2>
-<p>Inde aderam facti; Theseus vis de tauri illa peream. Oculos <strong>uberaque</strong> non
-regisque vobis cursuque, opus venit quam vulnera. Et maiora necemque, lege modo;
-gestanda nitidi, vero? Dum ne pectoraque testantur.</p>
-<p>Venasque repulsa Samos qui, exspectatum eram animosque hinc, <a href="http://www.creveratnon.net/apricaaetheriis">aut
-manes</a>, Assyrii. Cupiens auctoribus
-pariter rubet, profana magni super nocens. Vos ius sibilat inpar turba visae
-iusto! Sedes ante dum superest <strong>extrema</strong>.</p>
+<h1 id="why-we-need-replication">
+  Why we need replication
+  <a class="anchor" href="#why-we-need-replication">#</a>
+</h1>
+<ul>
+<li>keep the data geographically close to your users and reduce the latency</li>
+<li>increase availability</li>
+<li>scale out the number of machines so that serve read queries &amp; increase read throughput</li>
+</ul>
+<dl>
+
+  <dt>
+    <a href="/jojo_notes/docs/systemdesign/replication/leaders_and_followers/">Leaders and Followers</a>
+  </dt>
+  <dd class="markdown-inner">
+    
+  </dd>
+
+</dl>
+
 </article>
  
       
@@ -591,11 +593,7 @@ iusto! Sedes ante dum superest <strong>extrema</strong>.</p>
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#caesorum-illa-tu-sentit-micat-vestes-papyriferi">Caesorum illa tu sentit micat vestes papyriferi</a></li>
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
 
 
  

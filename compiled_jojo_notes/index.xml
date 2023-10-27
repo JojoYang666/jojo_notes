@@ -228,6 +228,15 @@ Daraflow through Databases # Store someting in the database as sending a message
     
     <item>
       <title></title>
+      <link>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/leaders_and_followers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/leaders_and_followers/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>http://jojoyang.site/jojo_notes/docs/systemdesign/storage-and-retrieval/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
