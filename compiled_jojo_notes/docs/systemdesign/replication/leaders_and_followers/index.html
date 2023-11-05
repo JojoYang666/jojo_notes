@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content="Leaders and Followers # Leader-based replication/master-slave replication # client sends request to the leader which first writes the new data to its local storage Other replicas known as followers whenever the leader writes the new data to its local storage -&gt; sends the data change to all of its followers as part of a replication log each replica take the log and write it to the local storage when client want to read from the db, it can either query the leader or any of followers.">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="Leaders and Followers # Leader-based replication/master-slave replication # client sends request to the leader which first writes the new data to its local storage Other replicas known as followers whenever the leader writes the new data to its local storage -&gt; sends the data change to all of its followers as part of a replication log each replica take the log and write it to the local storage when client want to read from the db, it can either query the leader or any of followers." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://jojoyang.site/jojo_notes/docs/systemdesign/replication/leaders_and_followers/" /><meta property="article:section" content="docs" />
 
@@ -16,7 +16,7 @@
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.d7dd79d9268808c1c88f2bf206f85cb3d3346d7a9148c8e274483a9b0b6c7663.js" integrity="sha256-19152SaICMHIjyvyBvhcs9M0bXqRSMjidEg6mwtsdmM=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.9f16b8ed9e0b12494389d92db14213c0304ada85729e681715a4e1eed77d0049.js" integrity="sha256-nxa47Z4LEklDidktsUITwDBK2oVynmgXFaTh7td9AEk=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -434,6 +434,17 @@ https://github.com/alex-shpak/hugo-book
   <ul>
     
       
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/systemdesign/replication/leaders_and_followers/" class="active">Leaders and Followers</a>
+  
+
+        </li>
+      
     
   </ul>
 
@@ -520,7 +531,25 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#leader-based-replicationmaster-slave-replication">Leader-based replication/master-slave replication</a></li>
+    <li><a href="#synchronnous-vs-asynchronous-replication">Synchronnous vs Asynchronous Replication</a>
+      <ul>
+        <li><a href="#synchronnous">Synchronnous</a></li>
+        <li><a href="#asynchronous">Asynchronous</a></li>
+        <li><a href="#semi-synchronous">Semi-synchronous</a></li>
+      </ul>
+    </li>
+    <li><a href="#setting-up-new-followers">Setting Up New Followers</a></li>
+    <li><a href="#handling-node-outages">Handling Node Outages</a>
+      <ul>
+        <li><a href="#follower-failure-catch-up-recovery">Follower failure&quot; catch-up recovery</a></li>
+        <li><a href="#leader-failure-failover">Leader failure: Failover</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
 
 
 
@@ -531,7 +560,113 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"></article>
+  <article class="markdown"><h1 id="leaders-and-followers">
+  Leaders and Followers
+  <a class="anchor" href="#leaders-and-followers">#</a>
+</h1>
+<h2 id="leader-based-replicationmaster-slave-replication">
+  Leader-based replication/master-slave replication
+  <a class="anchor" href="#leader-based-replicationmaster-slave-replication">#</a>
+</h2>
+<ul>
+<li>client sends request to the leader which first writes the new data to its local storage</li>
+<li>Other replicas known as <em>followers</em>
+<ul>
+<li>whenever the leader writes the new data to its local storage -&gt; sends the data change to all of its followers as part of a replication log</li>
+<li>each replica take the log and write it to the local storage</li>
+<li>when client want to read from the db, it can either query the leader or any of followers. However, writes are only accepted on the leader.</li>
+</ul>
+</li>
+</ul>
+<h2 id="synchronnous-vs-asynchronous-replication">
+  Synchronnous vs Asynchronous Replication
+  <a class="anchor" href="#synchronnous-vs-asynchronous-replication">#</a>
+</h2>
+<h3 id="synchronnous">
+  Synchronnous
+  <a class="anchor" href="#synchronnous">#</a>
+</h3>
+<p>the leader waits until followers confirmed that it received the write before reporting success to the user and before making the write visible to other clients</p>
+<ul>
+<li>the follower is guaranteed to have an up-to-date copy of data that is consistent with the leader</li>
+</ul>
+<h3 id="asynchronous">
+  Asynchronous
+  <a class="anchor" href="#asynchronous">#</a>
+</h3>
+<p>leader sends the message but does not wait for a response from the follower</p>
+<ul>
+<li>Normally the replication is pretty fast but there is no guarantee of how long it might take(e.g. network failure issues might happen)</li>
+</ul>
+<h3 id="semi-synchronous">
+  Semi-synchronous
+  <a class="anchor" href="#semi-synchronous">#</a>
+</h3>
+<p>If the synchronous follower becomes unavailable or slow, one of the asynchronous followers is made synchronous</p>
+<h2 id="setting-up-new-followers">
+  Setting Up New Followers
+  <a class="anchor" href="#setting-up-new-followers">#</a>
+</h2>
+<ul>
+<li>take a consistent snapshot of the leader&rsquo;s database at some point in time</li>
+<li>copy the snapshot to the new follower node</li>
+<li>the follower connects to the leader and requires all the data changes that have happened since the snapshot was taken.</li>
+<li>when the follower has processed the backlog of data changes since the snapshot, it can now continue to process data changes from the leader as they happen</li>
+</ul>
+<h2 id="handling-node-outages">
+  Handling Node Outages
+  <a class="anchor" href="#handling-node-outages">#</a>
+</h2>
+<h3 id="follower-failure-catch-up-recovery">
+  Follower failure&quot; catch-up recovery
+  <a class="anchor" href="#follower-failure-catch-up-recovery">#</a>
+</h3>
+<ul>
+<li>On local disk, each follower keeps a log of the data changes it has received from the leader</li>
+<li>when error happened, the follower can easily recovere from the log and coonect to the leader and request all the data changes that occurred during the time when the follower was disconnected.</li>
+</ul>
+<h3 id="leader-failure-failover">
+  Leader failure: Failover
+  <a class="anchor" href="#leader-failure-failover">#</a>
+</h3>
+<p>The way of the automatic failover process as below:</p>
+<ul>
+<li>Determining that the leader has failed
+<ul>
+<li>there is no foolproof way of detecting what has gone wrong</li>
+<li>most systems simply use a timeout
+<ul>
+<li>nodes frequently bounce message back and forth between each other and if a node does not respond for some period of time (e.g. 30s), it&rsquo;s assumed to be dead</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Choosing a new leader
+<ul>
+<li>either be done through an election process - the leader is chosen by a majority of the remaining replicas</li>
+<li>a new leader could be appointed by a previously elected <em>controller node</em></li>
+</ul>
+</li>
+<li>Reconfiguring the system to use the new leader
+<ul>
+<li>clients now need to send their wirte requests to the new leader</li>
+<li>The system needs to ensure that the old leader becomes a follower and recognizes the new leader</li>
+</ul>
+</li>
+</ul>
+<h4 id="failover-is-fraughr-with-things-that-can-go-wrong">
+  Failover is fraughr with things that can go wrong
+  <a class="anchor" href="#failover-is-fraughr-with-things-that-can-go-wrong">#</a>
+</h4>
+<ul>
+<li>If the asynchronous replication is used, the new leader may not have received all the writes from the old leader before it failed.
+<ul>
+<li>If the former leader rejoins the cluster after the new leader has been chosen -&gt; the new leader may have received conflicting writes in the meantime(confilcts wirtes which did not reciived before as a follower)</li>
+<li>the common solution: the old leader&rsquo;s unreplicated writes to simply be discarded, which may violate clients&rsquo; durability expectations</li>
+</ul>
+</li>
+</ul>
+</article>
  
       
 
@@ -556,6 +691,10 @@ https://github.com/alex-shpak/hugo-book
 
       
   
+  <div class="book-comments">
+
+</div>
+  
  
 
       <label for="menu-control" class="hidden book-menu-overlay"></label>
@@ -566,7 +705,25 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#leader-based-replicationmaster-slave-replication">Leader-based replication/master-slave replication</a></li>
+    <li><a href="#synchronnous-vs-asynchronous-replication">Synchronnous vs Asynchronous Replication</a>
+      <ul>
+        <li><a href="#synchronnous">Synchronnous</a></li>
+        <li><a href="#asynchronous">Asynchronous</a></li>
+        <li><a href="#semi-synchronous">Semi-synchronous</a></li>
+      </ul>
+    </li>
+    <li><a href="#setting-up-new-followers">Setting Up New Followers</a></li>
+    <li><a href="#handling-node-outages">Handling Node Outages</a>
+      <ul>
+        <li><a href="#follower-failure-catch-up-recovery">Follower failure&quot; catch-up recovery</a></li>
+        <li><a href="#leader-failure-failover">Leader failure: Failover</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
 
 
  

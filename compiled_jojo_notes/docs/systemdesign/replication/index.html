@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content=" Replication # Why we need replication # keep the data geographically close to your users and reduce the latency increase availability scale out the number of machines so that serve read queries &amp; increase read throughput Leaders and Followers ">
+<meta name="description" content="Replication # Why we need replication # keep the data geographically close to your users and reduce the latency increase availability scale out the number of machines so that serve read queries &amp; increase read throughput Leaders and Followers Leaders and Followers # Leader-based replication/master-slave replication # client sends request to the leader which first writes the new data to its local storage Other replicas known as followers whenever the leader writes the new data to its local storage -&gt; sends the data change to all of its followers as part of a replication log each replica take the log and write it to the local storage when client want to read from the db, it can either query the leader or any of followers.">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
 <meta property="og:description" content="" />
@@ -14,7 +14,7 @@
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.d7dd79d9268808c1c88f2bf206f85cb3d3346d7a9148c8e274483a9b0b6c7663.js" integrity="sha256-19152SaICMHIjyvyBvhcs9M0bXqRSMjidEg6mwtsdmM=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.9f16b8ed9e0b12494389d92db14213c0304ada85729e681715a4e1eed77d0049.js" integrity="sha256-nxa47Z4LEklDidktsUITwDBK2oVynmgXFaTh7td9AEk=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="http://jojoyang.site/jojo_notes/docs/systemdesign/replication/index.xml" title="My New Hugo Site" />
 <!--
 Made with Book Theme
@@ -433,6 +433,17 @@ https://github.com/alex-shpak/hugo-book
   <ul>
     
       
+        <li>
+          
+  
+  
+
+  
+    <a href="/jojo_notes/docs/systemdesign/replication/leaders_and_followers/" class="">Leaders and Followers</a>
+  
+
+        </li>
+      
     
   </ul>
 
@@ -549,7 +560,7 @@ https://github.com/alex-shpak/hugo-book
     <a href="/jojo_notes/docs/systemdesign/replication/leaders_and_followers/">Leaders and Followers</a>
   </dt>
   <dd class="markdown-inner">
-    
+    Leaders and Followers # Leader-based replication/master-slave replication # client sends request to the leader which first writes the new data to its local storage Other replicas known as followers whenever the leader writes the new data to its local storage -&gt; sends the data change to all of its followers as part of a replication log each replica take the log and write it to the local storage when client want to read from the db, it can either query the leader or any of followers.
   </dd>
 
 </dl>

@@ -232,7 +232,7 @@ Daraflow through Databases # Store someting in the database as sending a message
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/leaders_and_followers/</guid>
-      <description></description>
+      <description>Leaders and Followers # Leader-based replication/master-slave replication # client sends request to the leader which first writes the new data to its local storage Other replicas known as followers whenever the leader writes the new data to its local storage -&amp;gt; sends the data change to all of its followers as part of a replication log each replica take the log and write it to the local storage when client want to read from the db, it can either query the leader or any of followers.</description>
     </item>
     
     <item>
