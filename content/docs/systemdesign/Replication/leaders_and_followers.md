@@ -48,7 +48,15 @@ The way of the automatic failover process as below:
   * The system needs to ensure that the old leader becomes a follower and recognizes the new leader
 
 
-#### Failover is fraughr with things that can go wrong
+#### Failover is fraught with things that can go wrong
 * If the asynchronous replication is used, the new leader may not have received all the writes from the old leader before it failed.
   * If the former leader rejoins the cluster after the new leader has been chosen -> the new leader may have received conflicting writes in the meantime(confilcts wirtes which did not reciived before as a follower)
   * the common solution: the old leader's unreplicated writes to simply be discarded, which may violate clients' durability expectations
+* Discarding writes is especially dangerous(e.g. private data disclosure) if ospther storage systems outside of the db need to be coordinated with the db contents.
+* split brain: two nodes both believe that they are the leader
+* right timeout before the leader is declared dead
+  * longer timeout means a longer time to recovery where the leader fails
+  * short timeout -> unnecessary failovers
+    * if the system is already struggling with high load/network problems. unnecessary failovers makes the situation worse
+
+For this reason, some operations teams prefer to perform failovers manually even if the software supports automatic failover
