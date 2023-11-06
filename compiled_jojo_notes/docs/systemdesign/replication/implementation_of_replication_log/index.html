@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="First page # Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
+<meta name="description" content="Implementation of Replication Logs # Statement-based replication # The leader logs every write request that it executes ans sends that statement log to its followers. -&gt; each follower parses and executes that sql statement as if it had been received from a client. This approach to replication can break down
+Any statment that calls nondeterministic function(e.g. now()) is likely to generate a differrent value on each replica if statements depend on the existing data in the db, they must be executed in exactly the same order on each replica.">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
-<meta property="og:description" content="First page # Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
+<meta property="og:description" content="Implementation of Replication Logs # Statement-based replication # The leader logs every write request that it executes ans sends that statement log to its followers. -&gt; each follower parses and executes that sql statement as if it had been received from a client. This approach to replication can break down
+Any statment that calls nondeterministic function(e.g. now()) is likely to generate a differrent value on each replica if statements depend on the existing data in the db, they must be executed in exactly the same order on each replica." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://jojoyang.site/jojo_notes/docs/shortcodes/section/first-page/" /><meta property="article:section" content="docs" />
+<meta property="og:url" content="http://jojoyang.site/jojo_notes/docs/systemdesign/replication/implementation_of_replication_log/" /><meta property="article:section" content="docs" />
 
 
-<title>First Page | My New Hugo Site</title>
+<title>Implementation of Replication Log | My New Hugo Site</title>
 <link rel="manifest" href="/jojo_notes/manifest.json">
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
@@ -288,7 +288,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <input type="checkbox" id="section-d3fc1bf6d66cd84b896a0af9f40cb1d5" class="toggle" checked />
+    <input type="checkbox" id="section-d3fc1bf6d66cd84b896a0af9f40cb1d5" class="toggle"  />
     <label for="section-d3fc1bf6d66cd84b896a0af9f40cb1d5" class="flex justify-between">
       <a href="/jojo_notes/docs/shortcodes/section/" class="">Section</a>
     </label>
@@ -304,7 +304,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/jojo_notes/docs/shortcodes/section/first-page/" class="active">First Page</a>
+    <a href="/jojo_notes/docs/shortcodes/section/first-page/" class="">First Page</a>
   
 
         </li>
@@ -426,7 +426,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <input type="checkbox" id="section-fc0b57a80927aa25e065437e5f684e02" class="toggle"  />
+    <input type="checkbox" id="section-fc0b57a80927aa25e065437e5f684e02" class="toggle" checked />
     <label for="section-fc0b57a80927aa25e065437e5f684e02" class="flex justify-between">
       <a href="/jojo_notes/docs/systemdesign/replication/" class="">Replication</a>
     </label>
@@ -442,7 +442,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/jojo_notes/docs/systemdesign/replication/implementation_of_replication_log/" class="">Implementation of Replication Log</a>
+    <a href="/jojo_notes/docs/systemdesign/replication/implementation_of_replication_log/" class="active">Implementation of Replication Log</a>
   
 
         </li>
@@ -532,7 +532,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/jojo_notes/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>First Page</strong>
+  <strong>Implementation of Replication Log</strong>
 
   <label for="toc-control">
     
@@ -546,7 +546,12 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#statement-based-replication">Statement-based replication</a></li>
+    <li><a href="#write-ahead-logwal-shipping">Write-ahead log(WAL shipping)</a></li>
+  </ul>
+</nav>
 
 
 
@@ -557,13 +562,48 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h1 id="first-page">
-  First page
-  <a class="anchor" href="#first-page">#</a>
+  <article class="markdown"><h1 id="implementation-of-replication-logs">
+  Implementation of Replication Logs
+  <a class="anchor" href="#implementation-of-replication-logs">#</a>
 </h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-<!-- raw HTML omitted -->
-<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<h2 id="statement-based-replication">
+  Statement-based replication
+  <a class="anchor" href="#statement-based-replication">#</a>
+</h2>
+<p>The leader logs every write request that it executes ans sends that statement log to its followers. -&gt; each follower parses and executes that sql statement as if it had been received from a client. This approach to replication can break down</p>
+<ul>
+<li>Any statment that calls nondeterministic function(e.g. now()) is likely to generate a differrent value on each replica</li>
+<li>if statements depend on the existing data in the db, they must be executed in exactly the same order on each replica. -&gt; this can be limiting when there are multiple concurrently executing transactions</li>
+<li>statements that have side effects may result in different side effect occurring on each replica unless the side effects are absolutely deterministic</li>
+</ul>
+<h2 id="write-ahead-logwal-shipping">
+  Write-ahead log(WAL shipping)
+  <a class="anchor" href="#write-ahead-logwal-shipping">#</a>
+</h2>
+<ul>
+<li>the log is an <strong>append-only sequence</strong> of bytes containing all writes to the database</li>
+<li>use the same log to build a replica on another node
+<ul>
+<li>besides writing the log to disk,  the leader also sends it across the network to its followers</li>
+<li>when the follower processes this log, it builds a copy of the exact same data structure s as found on the leader</li>
+</ul>
+</li>
+<li>the disadvantage:
+<ul>
+<li>the log describes the data on a very low level(details of which bytes in which disk blocks)</li>
+<li>replication closely coupled to the storage engine</li>
+<li>if the db changes its storage format from one version to another -&gt; not possible to run different versions of the datavase software on the leader and the follower
+<ul>
+<li>A big operational impact
+<ul>
+<li><strong>if the replication protocol allows the follower to use a newer software version than the leader -&gt; we can perform 0-downtime upgrade of the database software by first upgrading the followers and then performing a failover to make one of upgraded nodes the new leader</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 </article>
  
       
@@ -603,7 +643,12 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#statement-based-replication">Statement-based replication</a></li>
+    <li><a href="#write-ahead-logwal-shipping">Write-ahead log(WAL shipping)</a></li>
+  </ul>
+</nav>
 
 
  

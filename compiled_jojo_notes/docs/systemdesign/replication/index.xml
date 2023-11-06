@@ -8,6 +8,16 @@
     <language>en-us</language><atom:link href="http://jojoyang.site/jojo_notes/docs/systemdesign/replication/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
+      <link>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/implementation_of_replication_log/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/implementation_of_replication_log/</guid>
+      <description>Implementation of Replication Logs # Statement-based replication # The leader logs every write request that it executes ans sends that statement log to its followers. -&amp;gt; each follower parses and executes that sql statement as if it had been received from a client. This approach to replication can break down
+Any statment that calls nondeterministic function(e.g. now()) is likely to generate a differrent value on each replica if statements depend on the existing data in the db, they must be executed in exactly the same order on each replica.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/leaders_and_followers/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
