@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Replication # Why we need replication # keep the data geographically close to your users and reduce the latency increase availability scale out the number of machines so that serve read queries &amp; increase read throughput Implementation of Replication Log Implementation of Replication Logs # Statement-based replication # The leader logs every write request that it executes ans sends that statement log to its followers. -&gt; each follower parses and executes that sql statement as if it had been received from a client.">
+<meta name="description" content="Replication # Why we need replication # keep the data geographically close to your users and reduce the latency increase availability scale out the number of machines so that serve read queries &amp; increase read throughput Leaders and Followers Leaders and Followers # Leader-based replication/master-slave replication # client sends request to the leader which first writes the new data to its local storage Other replicas known as followers whenever the leader writes the new data to its local storage -&gt; sends the data change to all of its followers as part of a replication log each replica take the log and write it to the local storage when client want to read from the db, it can either query the leader or any of followers.">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
 <meta property="og:description" content="" />
@@ -14,7 +14,7 @@
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.2e88a2efb4edfcdd8de3c880c1ab4dd331ca0e0e534edc4ba802918faff58f82.js" integrity="sha256-Loii77Tt/N2N48iAwatN0zHKDg5TTtxLqAKRj6/1j4I=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.2f444d6071b97bea466fe280705de033416ec7bcb371e32ea1a683bbffad661a.js" integrity="sha256-L0RNYHG5e&#43;pGb&#43;KAcF3gM0Fux7yzceMuoaaDu/&#43;tZho=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="http://jojoyang.site/jojo_notes/docs/systemdesign/replication/index.xml" title="My New Hugo Site" />
 <!--
 Made with Book Theme
@@ -439,7 +439,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/jojo_notes/docs/systemdesign/replication/implementation_of_replication_log/" class="">Implementation of Replication Log</a>
+    <a href="/jojo_notes/docs/systemdesign/replication/leaders_and_followers/" class="">Leaders and Followers</a>
   
 
         </li>
@@ -452,7 +452,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/jojo_notes/docs/systemdesign/replication/leaders_and_followers/" class="">Leaders and Followers</a>
+    <a href="/jojo_notes/docs/systemdesign/replication/problems_with_replication_lag/" class="">Problems With Replication Lag</a>
   
 
         </li>
@@ -570,18 +570,18 @@ https://github.com/alex-shpak/hugo-book
 <dl>
 
   <dt>
-    <a href="/jojo_notes/docs/systemdesign/replication/implementation_of_replication_log/">Implementation of Replication Log</a>
-  </dt>
-  <dd class="markdown-inner">
-    Implementation of Replication Logs # Statement-based replication # The leader logs every write request that it executes ans sends that statement log to its followers. -&gt; each follower parses and executes that sql statement as if it had been received from a client. This approach to replication can break down
-Any statment that calls nondeterministic function(e.g. now()) is likely to generate a differrent value on each replica if statements depend on the existing data in the db, they must be executed in exactly the same order on each replica.
-  </dd>
-
-  <dt>
     <a href="/jojo_notes/docs/systemdesign/replication/leaders_and_followers/">Leaders and Followers</a>
   </dt>
   <dd class="markdown-inner">
     Leaders and Followers # Leader-based replication/master-slave replication # client sends request to the leader which first writes the new data to its local storage Other replicas known as followers whenever the leader writes the new data to its local storage -&gt; sends the data change to all of its followers as part of a replication log each replica take the log and write it to the local storage when client want to read from the db, it can either query the leader or any of followers.
+  </dd>
+
+  <dt>
+    <a href="/jojo_notes/docs/systemdesign/replication/problems_with_replication_lag/">Problems With Replication Lag</a>
+  </dt>
+  <dd class="markdown-inner">
+    Implementation of Replication Logs # Statement-based replication # The leader logs every write request that it executes ans sends that statement log to its followers. -&gt; each follower parses and executes that sql statement as if it had been received from a client. This approach to replication can break down
+Any statment that calls nondeterministic function(e.g. now()) is likely to generate a differrent value on each replica if statements depend on the existing data in the db, they must be executed in exactly the same order on each replica.
   </dd>
 
 </dl>
