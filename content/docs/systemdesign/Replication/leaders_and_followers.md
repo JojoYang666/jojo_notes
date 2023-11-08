@@ -82,3 +82,14 @@ The leader logs every write request that it executes ans sends that statement lo
       * **if the replication protocol allows the follower to use a newer software version than the leader -> we can perform 0-downtime upgrade of the database software by first upgrading the followers and then performing a failover to make one of upgraded nodes the new leader**
 
 ### Logical(row-based) log replication
+logical log: a sequence of records describing writes to database tables at the granularity of a row which is distinguished from the storage engine's data representation.
+* For an inserted row, the log contains the new values of all columns.
+* For a deleted row, the log contains enough information to uniquely identify the row that was deleted.
+* For an updated row, the log contains enough information to uniqurely identify the updated row, and the new values of all columns.
+
+### Trigger-based Replication
+* Used for more flexibility requirement - e.g. just want to duplicate one kind of data
+* A trigger - register custom application code that is automatically executed when a data change occurs in the database system
+* the trigger has the opportunity to log this change into a seperate table from which it can be read by an external process.
+* the external process can then apply any necessary application logic and replicate the data change to another system.
+* Has greater overheads than other replication methods and is more prone to bugs and limitations than the db's built in replication. but it's useful due to its flexibility
