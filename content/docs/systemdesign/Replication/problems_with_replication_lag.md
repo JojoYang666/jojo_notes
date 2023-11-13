@@ -28,4 +28,7 @@ One popular approach: Let user submit some data and then review what they have s
 
 
 ### Cross device read-after-write consistency
-
+Enters some information on one device then views it on another device. Additional issues considered below
+* Approaches that require remembering the timestamp of the user's last update become more difficult - the metadat will need to be centralized
+* if your replicas are distributed across different datacenters, there is no guarantee that connections from different devices will be routed to the same datacenter
+  * if your approach requires reading from the leader, you may first need to route requests from all of a user's devices to the same datacenter.
