@@ -14,6 +14,7 @@ there are several real problems listed below when replication lag happens.
 ## Reading Your Own Writes
 One popular approach: Let user submit some data and then review what they have submitted - when new data is submitted, it must be sent to the leader; when the user views the data, it can be read from the follower.
 
+### read-after-write consistency
 * With asynchronous replication - if the user views the data shortly after making a write, the new data may not yet have reached the replica -> to the user, it looks as though the data they submitted was lost
 * To solve it, need **read-after-write consistency**. The possible solutions listed below
   * Reading something that the user may have modified, read it from the leader. Otherwise, read it from follower.
