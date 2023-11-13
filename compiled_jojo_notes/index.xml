@@ -237,11 +237,11 @@ Daraflow through Databases # Store someting in the database as sending a message
     
     <item>
       <title></title>
-      <link>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/problems_with_replication_log/</link>
+      <link>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/problems_with_replication_lag/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/problems_with_replication_log/</guid>
-      <description></description>
+      <guid>http://jojoyang.site/jojo_notes/docs/systemdesign/replication/problems_with_replication_lag/</guid>
+      <description>Problems with Replication Lag # Leader-based replication requires all writes to go through a single node Read-only queries can go to any replica For workloads that consist of mostly reads and only a small percentage of writes(read-scaling architetecture) create many followers and distribute the read requests across those follower Only realistically works with asychronous replication unifortunately, reading from an asynchronous follower -&amp;gt; outdated information may be seen. but eventually can update to date when there is no more writing coming into this is called replication lag - maty be only a fraction of a second and not practice if the system is operating near capacity or if there is a problem in the network- the lag can easily increase to several seconds or even minutes.</description>
     </item>
     
     <item>
