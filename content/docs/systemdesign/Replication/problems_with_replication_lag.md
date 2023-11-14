@@ -33,3 +33,15 @@ Enters some information on one device then views it on another device. Additiona
 * Approaches that require remembering the timestamp of the user's last update become more difficult - the metadat will need to be centralized
 * if your replicas are distributed across different datacenters, there is no guarantee that connections from different devices will be routed to the same datacenter
   * if your approach requires reading from the leader, you may first need to route requests from all of a user's devices to the same datacenter.
+
+### Monotonic Read
+User to see things *moving backward in time* which happens if user makes several reads from different replicas
+
+* Monotonic reads only menas that if one user makes several reads in sequence,  they will not see time go backward
+  * e.g. replica can be chosen based on a hash of the user ID rather than randomly
+
+### Consistent Prefix Reads
+Consisten prefix reads guarantee that if a sequence of writes happens in a certain order, then anyone reading those writes will see them appear in the same order
+
+## Solution for Replication Lag
+* Worth thinking about how the application behaves if the replication lag increases to serveral minutes or even hours
