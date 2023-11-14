@@ -14,7 +14,7 @@
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.70ec06895e086aa4b6b39025d4c7a24e715f5d8a2e3fe0c8701eb22ded236a20.js" integrity="sha256-cOwGiV4IaqS2s5Al1MeiTnFfXYouP&#43;DIcB6yLe0jaiA=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.eee327fdd0efb1f97160daebac97e3c49a3c6af0021bf266d9fe66f82d446489.js" integrity="sha256-7uMn/dDvsflxYNrrrJfjxJo8avACG/Jm2f5m&#43;C1EZIk=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="http://jojoyang.site/jojo_notes/docs/systemdesign/replication/index.xml" title="My New Hugo Site" />
 <!--
 Made with Book Theme
@@ -452,6 +452,19 @@ https://github.com/alex-shpak/hugo-book
   
 
   
+    <a href="/jojo_notes/docs/systemdesign/replication/multi_leader_replication/" class="">Multi Leader Replication</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
     <a href="/jojo_notes/docs/systemdesign/replication/problems_with_replication_lag/" class="">Problems With Replication Lag</a>
   
 
@@ -574,6 +587,16 @@ https://github.com/alex-shpak/hugo-book
   </dt>
   <dd class="markdown-inner">
     Leaders and Followers # Leader-based replication/master-slave replication # client sends request to the leader which first writes the new data to its local storage Other replicas known as followers whenever the leader writes the new data to its local storage -&gt; sends the data change to all of its followers as part of a replication log each replica take the log and write it to the local storage when client want to read from the db, it can either query the leader or any of followers.
+  </dd>
+
+  <dt>
+    <a href="/jojo_notes/docs/systemdesign/replication/multi_leader_replication/">Multi Leader Replication</a>
+  </dt>
+  <dd class="markdown-inner">
+    Multi-Leader Replication # Multi-leader/Master-master configuration - each leader simultnaneously acts as a follower to other leaders
+Use Cases for Multi-Leader Replication # Multi-datacenter operation # Within each datacenter, regular leader-follower replication is used; between datacenters, each datacenter&rsquo;s leader replicates its changes to the leaders in other datacenters.
+Single-leader vs Multi-leader
+Performance The inter-datacenter network delay is hidden from users which means the perceived performance may be better -(multi-leader) Tolerance of datacenter outages Tolerance of network problems The big downside of the multi leader: the same data may be concurrently modified in two different datacenters and those wirte conflicts must be resolved
   </dd>
 
   <dt>
