@@ -17,3 +17,9 @@ The big downside of the multi leader: the same data may be concurrently modified
 
 ### Clients with offline operation
 Multi-leader replication is appropriate - if you have an application that needs to continue to work while it is disconnected from the internet
+
+each local device has a local db that acts as a leader which can be considered as datacenter
+
+### Callaborative editing
+
+## Handling Write Conflicts
