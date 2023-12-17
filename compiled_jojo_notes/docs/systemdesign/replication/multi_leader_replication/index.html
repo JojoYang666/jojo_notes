@@ -22,7 +22,7 @@ Performance The inter-datacenter network delay is hidden from users which means 
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.540abd0df345e21dabcc3ea008bad152f4d8eb53fcf01b7b0f7fc05e6810116c.js" integrity="sha256-VAq9DfNF4h2rzD6gCLrRUvTY61P88Bt7D3/AXmgQEWw=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.1a68a175eeb32cf52706367a9a5b5420612c0202818966501fb4984b6c54dbab.js" integrity="sha256-Gmihde6zLPUnBjZ6mltUIGEsAgKBiWZQH7SYS2xU26s=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -572,7 +572,15 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#callaborative-editing">Callaborative editing</a></li>
       </ul>
     </li>
-    <li><a href="#handling-write-conflicts">Handling Write Conflicts</a></li>
+    <li><a href="#handling-write-conflicts">Handling Write Conflicts</a>
+      <ul>
+        <li><a href="#synchronous-vs-asynchrounous-conflict-detection">Synchronous vs Asynchrounous Conflict Detection</a></li>
+        <li><a href="#conflict-avoidance">Conflict Avoidance</a></li>
+        <li><a href="#converging-toward-a-consistent-state">Converging toward a consistent state</a></li>
+        <li><a href="#custom-conflict-resolution-logic">Custom conflict resolution logic</a></li>
+      </ul>
+    </li>
+    <li><a href="#multi-leader-replication-topologies">Multi-Leader Replication Topologies</a></li>
   </ul>
 </nav>
 
@@ -623,10 +631,93 @@ https://github.com/alex-shpak/hugo-book
   Callaborative editing
   <a class="anchor" href="#callaborative-editing">#</a>
 </h3>
+<p>make the unit of change very small and avoid locking</p>
 <h2 id="handling-write-conflicts">
   Handling Write Conflicts
   <a class="anchor" href="#handling-write-conflicts">#</a>
 </h2>
+<p>Wirting conflicts can happen on the Multi-leader replication</p>
+<h3 id="synchronous-vs-asynchrounous-conflict-detection">
+  Synchronous vs Asynchrounous Conflict Detection
+  <a class="anchor" href="#synchronous-vs-asynchrounous-conflict-detection">#</a>
+</h3>
+<ul>
+<li>Single-leader db, the second writer will either block and wait for the first write to completer/abort the second transaction</li>
+<li>Multi-leader: conflict is only detected async at some time later at some point -&gt; may too late
+<ul>
+<li>could the make the conflict detection synchronous -&gt; however, it loses the advantage of multi-leader replication</li>
+</ul>
+</li>
+</ul>
+<h3 id="conflict-avoidance">
+  Conflict Avoidance
+  <a class="anchor" href="#conflict-avoidance">#</a>
+</h3>
+<ul>
+<li>If the application can ensure that all writes for a <strong>particular record</strong> go though the <strong>same leader</strong>, -&gt; the conflicts cannot occur.</li>
+<li>Aviod conflicts is the <em>frequently</em> recommended approach</li>
+<li>For the application where a user can edit their own data -&gt;from any one user&rsquo;s point of view -&gt; the configuration is essentially single user
+<ul>
+<li>some times change the designated leader for a record is needed
+<ul>
+<li>conflict avoidance breaks down and have to deal with the possibility of concurrent writes on different leaders</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="converging-toward-a-consistent-state">
+  Converging toward a consistent state
+  <a class="anchor" href="#converging-toward-a-consistent-state">#</a>
+</h3>
+<p>All replicas must arrive at the same final value when all changes have been replicated</p>
+<p>Conflict Resolution:</p>
+<ol>
+<li>Give each write a uniqure ID -&gt; ouck the write with the highest ID as the winner and throw away other wirtes</li>
+<li>Give each replica a uniqure UD -&gt; writes that originated at a higher numberred replica always take precedence over writes that origineated at a lower numbered replica</li>
+<li>somehow merge the values together</li>
+<li>Record the conflict in an explicit data structure that preserces all information and write application code that resolves the conflict at some later time</li>
+</ol>
+<h3 id="custom-conflict-resolution-logic">
+  Custom conflict resolution logic
+  <a class="anchor" href="#custom-conflict-resolution-logic">#</a>
+</h3>
+<p>The ocde if resolutioon logic be excuted on write/on read:</p>
+<h4 id="on-writer">
+  On writer
+  <a class="anchor" href="#on-writer">#</a>
+</h4>
+<p>As soon as db detects a conflict in the log of replicated changes -&gt; it calls the conflit handler</p>
+<h4 id="on-read">
+  On read
+  <a class="anchor" href="#on-read">#</a>
+</h4>
+<p>conflict detected -&gt; conficting writes stored -&gt; multiple versions of the data are returned to the application -&gt; user reolve and write back to the database</p>
+<h2 id="multi-leader-replication-topologies">
+  Multi-Leader Replication Topologies
+  <a class="anchor" href="#multi-leader-replication-topologies">#</a>
+</h2>
+<ol>
+<li>Describles the communication paths along which writes are propogated from one node to another.</li>
+<li>THe most general topology is all to all
+<ol>
+<li>Every leader sends its writes to every other leader</li>
+<li>Some network links may be faster than others with the result that some replication message may overtake others</li>
+<li>Order events correctly -&gt; version control</li>
+</ol>
+</li>
+<li>Circular and start topologies:
+<ol>
+<li>prevent infinite replication loops -&gt; each node is given a uniqure identifier -&gt;in the replication log, each write is tagged with the identifiers of all the nodes it has passed through -&gt; when a node receives a data change that is tagged with its own identifier, that data change is ignored</li>
+<li>Problem: if just one node fails, it interrupt the flow of replication messages between other nodes, causing them to be unable to communicate until the node is fixed</li>
+</ol>
+</li>
+<li>Using system with multi leader replication- &gt; worh being aware of these issues, read doc, thoroughly testing db</li>
+</ol>
+<h1 id="leaderless-replication">
+  Leaderless Replication
+  <a class="anchor" href="#leaderless-replication">#</a>
+</h1>
 </article>
  
       
@@ -675,7 +766,15 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#callaborative-editing">Callaborative editing</a></li>
       </ul>
     </li>
-    <li><a href="#handling-write-conflicts">Handling Write Conflicts</a></li>
+    <li><a href="#handling-write-conflicts">Handling Write Conflicts</a>
+      <ul>
+        <li><a href="#synchronous-vs-asynchrounous-conflict-detection">Synchronous vs Asynchrounous Conflict Detection</a></li>
+        <li><a href="#conflict-avoidance">Conflict Avoidance</a></li>
+        <li><a href="#converging-toward-a-consistent-state">Converging toward a consistent state</a></li>
+        <li><a href="#custom-conflict-resolution-logic">Custom conflict resolution logic</a></li>
+      </ul>
+    </li>
+    <li><a href="#multi-leader-replication-topologies">Multi-Leader Replication Topologies</a></li>
   </ul>
 </nav>
 
