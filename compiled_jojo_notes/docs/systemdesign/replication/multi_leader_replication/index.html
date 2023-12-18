@@ -22,7 +22,7 @@ Performance The inter-datacenter network delay is hidden from users which means 
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.1a68a175eeb32cf52706367a9a5b5420612c0202818966501fb4984b6c54dbab.js" integrity="sha256-Gmihde6zLPUnBjZ6mltUIGEsAgKBiWZQH7SYS2xU26s=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.43336e1744c64688c0e151ee545514666da377fc3234ddf504fdbe5fe7bb5e21.js" integrity="sha256-QzNuF0TGRojA4VHuVFUUZm2jd/wyNN31BP2&#43;X&#43;e7XiE=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -582,6 +582,15 @@ https://github.com/alex-shpak/hugo-book
     </li>
     <li><a href="#multi-leader-replication-topologies">Multi-Leader Replication Topologies</a></li>
   </ul>
+
+  <ul>
+    <li><a href="#writing-to-the-db-when-a-node-is-down">Writing to the db when a node is down</a>
+      <ul>
+        <li><a href="#read-repair-and-anti-entropy">Read repair and anti-entropy</a></li>
+        <li><a href="#quorums-for-reading-and-writing">Quorums for reading and writing</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
 
 
@@ -718,6 +727,71 @@ https://github.com/alex-shpak/hugo-book
   Leaderless Replication
   <a class="anchor" href="#leaderless-replication">#</a>
 </h1>
+<ol>
+<li>Client directly sends its writes to several replicas, while, a coordinator node does this on behalf of the client</li>
+<li>the coordinator does not enforce a particular ordering of writes</li>
+</ol>
+<h2 id="writing-to-the-db-when-a-node-is-down">
+  Writing to the db when a node is down
+  <a class="anchor" href="#writing-to-the-db-when-a-node-is-down">#</a>
+</h2>
+<ol>
+<li>Sending wirte request to multiple nodes in parallel as long as some of nodes hanles write request sucessfully. We are good</li>
+<li>Read request:
+<ol>
+<li>read request are also sent to several nodes in parallel</li>
+<li>version number are used to determine which value is newer</li>
+</ol>
+</li>
+</ol>
+<h3 id="read-repair-and-anti-entropy">
+  Read repair and anti-entropy
+  <a class="anchor" href="#read-repair-and-anti-entropy">#</a>
+</h3>
+<h4 id="read-repair">
+  Read repair
+  <a class="anchor" href="#read-repair">#</a>
+</h4>
+<ul>
+<li>Detect any stale responses when sending read request</li>
+<li>Works well for values that are frequently read.</li>
+</ul>
+<h4 id="anti-entropy-process">
+  Anti-entropy process
+  <a class="anchor" href="#anti-entropy-process">#</a>
+</h4>
+<p>Background process that consistantly looks for differences in the data between replicas and copies any missing data from one replica to another</p>
+<h3 id="quorums-for-reading-and-writing">
+  Quorums for reading and writing
+  <a class="anchor" href="#quorums-for-reading-and-writing">#</a>
+</h3>
+<ol>
+<li>n replicas, w nodes to be considered <strong>successful</strong> for write request, query at least r nodes for each read
+<ol>
+<li>w + r &gt; n -&gt; get an up to date value when reading</li>
+<li>common choice: n -&gt; odd number(typically 3 or 5), w = r = (n+1)/2</li>
+<li>Workload with few writes and many reads -&gt; benefit from setting w = n &amp; r = 1</li>
+</ol>
+</li>
+<li>w, r determine how many nodes we wait for/how many of n nodes need to report success before we consider the read/write to be successful.</li>
+</ol>
+<h4 id="limitations-of-quorum-consistency">
+  Limitations of Quorum Consistency
+  <a class="anchor" href="#limitations-of-quorum-consistency">#</a>
+</h4>
+<p>Smaller w and r which makes 2+ r &lt; n:</p>
+<ul>
+<li>allows lower latency and higher availability even though more likely to read stale values</li>
+</ul>
+<p>Even with w+r &gt; n, lokelu to be edfe cases where stale values are retured:</p>
+<ul>
+<li><em>sloppy quorum is used</em>, no guaranteed overlap between the r nodes and the w nodes</li>
+<li>two writes occur concurrently -&gt; not clear which one happened first</li>
+<li>wirte happens concuurrently with read -&gt; wirte may be reflected on only some of the replicas</li>
+<li>wirte succeeded on some replicas but failed on others &amp; overall succeeded on fewer than w replicas -&gt; not rolled back on the replicas where it succeeded</li>
+<li>node carrying a new value fails &amp; data restored from a replica carrying an old value -&gt; # of replicas storing the new value may fall below w -&gt; breaking the quorum conditions</li>
+<li>there are some edge cases going with the timing</li>
+</ul>
 </article>
  
       
@@ -775,6 +849,15 @@ https://github.com/alex-shpak/hugo-book
       </ul>
     </li>
     <li><a href="#multi-leader-replication-topologies">Multi-Leader Replication Topologies</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#writing-to-the-db-when-a-node-is-down">Writing to the db when a node is down</a>
+      <ul>
+        <li><a href="#read-repair-and-anti-entropy">Read repair and anti-entropy</a></li>
+        <li><a href="#quorums-for-reading-and-writing">Quorums for reading and writing</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
