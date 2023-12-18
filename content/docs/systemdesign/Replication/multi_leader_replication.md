@@ -68,3 +68,38 @@ conflict detected -> conficting writes stored -> multiple versions of the data a
 4. Using system with multi leader replication- > worh being aware of these issues, read doc, thoroughly testing db
 
 # Leaderless Replication
+1. Client directly sends its writes to several replicas, while, a coordinator node does this on behalf of the client
+2. the coordinator does not enforce a particular ordering of writes
+
+## Writing to the db when a node is down
+1. Sending wirte request to multiple nodes in parallel as long as some of nodes hanles write request sucessfully. We are good
+2. Read request: 
+   1. read request are also sent to several nodes in parallel
+   2. version number are used to determine which value is newer
+
+### Read repair and anti-entropy
+#### Read repair
+* Detect any stale responses when sending read request
+* Works well for values that are frequently read.
+
+#### Anti-entropy process
+Background process that consistantly looks for differences in the data between replicas and copies any missing data from one replica to another
+
+### Quorums for reading and writing
+1. n replicas, w nodes to be considered **successful** for write request, query at least r nodes for each read
+   1. w + r > n -> get an up to date value when reading
+   2. common choice: n -> odd number(typically 3 or 5), w = r = (n+1)/2
+   3. Workload with few writes and many reads -> benefit from setting w = n & r = 1
+2. w, r determine how many nodes we wait for/how many of n nodes need to report success before we consider the read/write to be successful.
+
+#### Limitations of Quorum Consistency
+Smaller w and r which makes 2+ r < n:
+* allows lower latency and higher availability even though more likely to read stale values
+
+Even with w+r > n, lokelu to be edfe cases where stale values are retured:
+* *sloppy quorum is used*, no guaranteed overlap between the r nodes and the w nodes
+* two writes occur concurrently -> not clear which one happened first
+* wirte happens concuurrently with read -> wirte may be reflected on only some of the replicas
+* wirte succeeded on some replicas but failed on others & overall succeeded on fewer than w replicas -> not rolled back on the replicas where it succeeded
+* node carrying a new value fails & data restored from a replica carrying an old value -> # of replicas storing the new value may fall below w -> breaking the quorum conditions
+* there are some edge cases going with the timing 
