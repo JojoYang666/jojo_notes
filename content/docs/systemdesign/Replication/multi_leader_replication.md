@@ -93,7 +93,7 @@ Background process that consistantly looks for differences in the data between r
 2. w, r determine how many nodes we wait for/how many of n nodes need to report success before we consider the read/write to be successful.
 
 #### Limitations of Quorum Consistency
-Smaller w and r which makes 2+ r < n:
+Smaller w and r which makes w+ r < n:
 * allows lower latency and higher availability even though more likely to read stale values
 
 Even with w+r > n, lokelu to be edfe cases where stale values are retured:
@@ -102,4 +102,34 @@ Even with w+r > n, lokelu to be edfe cases where stale values are retured:
 * wirte happens concuurrently with read -> wirte may be reflected on only some of the replicas
 * wirte succeeded on some replicas but failed on others & overall succeeded on fewer than w replicas -> not rolled back on the replicas where it succeeded
 * node carrying a new value fails & data restored from a replica carrying an old value -> # of replicas storing the new value may fall below w -> breaking the quorum conditions
-* there are some edge cases going with the timing 
+* there are some edge cases going with the timing
+
+##### Monitoring staleness
+* Leader-based replication
+  *  since writes are applied to the leader and followers in the same order and each node has a position in the replication log
+     *  substractinng a follower's current position from the leader's current position, -> measure the amount of replication lag
+* Leaderless replication
+  * difficult to measure and better to have a metric
+
+## Sloppy Quorums and Hinted Handoff
+* quorums are not as fault-tolerant - network interruption can easily cut off a client from a large number of db nodes which may make other clients fail
+* sloppy quorums
+  * during the network interruption, client can connect to some db nodes which is not to the node that it needs to assemble a quorum for a particular value
+    * write them to some nodes that are reachable but are not among the n nodes on which the value usually lives
+  * increases write availability
+  * cons: even when w + r > n -> cannot guaranntee that a read of r nodes will see it until the hinted handoff has completed
+  * this is an assurance of durability
+
+## Detecting Concurrent Writes
+* The last write wins(discarding concurrent writes)
+  * achieves the goal of eventual convergence but at the cost of durability - drap some wirtes when concurrennt even are not concurrent(timestamp for ordering issues)
+  * LWW is a poor choice when losing data is not acceptable
+  * the only safe way of using a db with LWW is to ensure that a key is only written once and thereafter treated as immutable thus avoid any concurrent updates to the same key
+
+* the "happens-before" relationship and concurrency
+  * an operation A happens before another operation B if B knows about A or depends on A or builds upon A in some way
+  * two operations A and B, there are 3 possibilities
+    * A happened before B
+    * B happened before A
+    * A and B are concurrent
+      * it's not necessary happens on the same time as long as there is no causal dependency between operations
