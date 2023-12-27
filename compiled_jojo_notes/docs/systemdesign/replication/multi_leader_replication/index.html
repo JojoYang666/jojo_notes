@@ -22,7 +22,7 @@ Performance The inter-datacenter network delay is hidden from users which means 
 <link rel="icon" href="/jojo_notes/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/jojo_notes/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
   <script defer src="/jojo_notes/flexsearch.min.js"></script>
-  <script defer src="/jojo_notes/en.search.min.43336e1744c64688c0e151ee545514666da377fc3234ddf504fdbe5fe7bb5e21.js" integrity="sha256-QzNuF0TGRojA4VHuVFUUZm2jd/wyNN31BP2&#43;X&#43;e7XiE=" crossorigin="anonymous"></script>
+  <script defer src="/jojo_notes/en.search.min.1f8ff647585294a2a3a91ec4cb9e3192ef3976a6ca1978d4a03499c65f2bee67.js" integrity="sha256-H4/2R1hSlKKjqR7Ey54xku85dqbKGXjUoDSZxl8r7mc=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -590,6 +590,8 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#quorums-for-reading-and-writing">Quorums for reading and writing</a></li>
       </ul>
     </li>
+    <li><a href="#sloppy-quorums-and-hinted-handoff">Sloppy Quorums and Hinted Handoff</a></li>
+    <li><a href="#detecting-concurrent-writes">Detecting Concurrent Writes</a></li>
   </ul>
 </nav>
 
@@ -779,7 +781,7 @@ https://github.com/alex-shpak/hugo-book
   Limitations of Quorum Consistency
   <a class="anchor" href="#limitations-of-quorum-consistency">#</a>
 </h4>
-<p>Smaller w and r which makes 2+ r &lt; n:</p>
+<p>Smaller w and r which makes w+ r &lt; n:</p>
 <ul>
 <li>allows lower latency and higher availability even though more likely to read stale values</li>
 </ul>
@@ -791,6 +793,76 @@ https://github.com/alex-shpak/hugo-book
 <li>wirte succeeded on some replicas but failed on others &amp; overall succeeded on fewer than w replicas -&gt; not rolled back on the replicas where it succeeded</li>
 <li>node carrying a new value fails &amp; data restored from a replica carrying an old value -&gt; # of replicas storing the new value may fall below w -&gt; breaking the quorum conditions</li>
 <li>there are some edge cases going with the timing</li>
+</ul>
+<h5 id="monitoring-staleness">
+  Monitoring staleness
+  <a class="anchor" href="#monitoring-staleness">#</a>
+</h5>
+<ul>
+<li>Leader-based replication
+<ul>
+<li>since writes are applied to the leader and followers in the same order and each node has a position in the replication log
+<ul>
+<li>substractinng a follower&rsquo;s current position from the leader&rsquo;s current position, -&gt; measure the amount of replication lag</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Leaderless replication
+<ul>
+<li>difficult to measure and better to have a metric</li>
+</ul>
+</li>
+</ul>
+<h2 id="sloppy-quorums-and-hinted-handoff">
+  Sloppy Quorums and Hinted Handoff
+  <a class="anchor" href="#sloppy-quorums-and-hinted-handoff">#</a>
+</h2>
+<ul>
+<li>quorums are not as fault-tolerant - network interruption can easily cut off a client from a large number of db nodes which may make other clients fail</li>
+<li>sloppy quorums
+<ul>
+<li>during the network interruption, client can connect to some db nodes which is not to the node that it needs to assemble a quorum for a particular value
+<ul>
+<li>write them to some nodes that are reachable but are not among the n nodes on which the value usually lives</li>
+</ul>
+</li>
+<li>increases write availability</li>
+<li>cons: even when w + r &gt; n -&gt; cannot guaranntee that a read of r nodes will see it until the hinted handoff has completed</li>
+<li>this is an assurance of durability</li>
+</ul>
+</li>
+</ul>
+<h2 id="detecting-concurrent-writes">
+  Detecting Concurrent Writes
+  <a class="anchor" href="#detecting-concurrent-writes">#</a>
+</h2>
+<ul>
+<li>
+<p>The last write wins(discarding concurrent writes)</p>
+<ul>
+<li>achieves the goal of eventual convergence but at the cost of durability - drap some wirtes when concurrennt even are not concurrent(timestamp for ordering issues)</li>
+<li>LWW is a poor choice when losing data is not acceptable</li>
+<li>the only safe way of using a db with LWW is to ensure that a key is only written once and thereafter treated as immutable thus avoid any concurrent updates to the same key</li>
+</ul>
+</li>
+<li>
+<p>the &ldquo;happens-before&rdquo; relationship and concurrency</p>
+<ul>
+<li>an operation A happens before another operation B if B knows about A or depends on A or builds upon A in some way</li>
+<li>two operations A and B, there are 3 possibilities
+<ul>
+<li>A happened before B</li>
+<li>B happened before A</li>
+<li>A and B are concurrent
+<ul>
+<li>it&rsquo;s not necessary happens on the same time as long as there is no causal dependency between operations</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </article>
  
@@ -858,6 +930,8 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#quorums-for-reading-and-writing">Quorums for reading and writing</a></li>
       </ul>
     </li>
+    <li><a href="#sloppy-quorums-and-hinted-handoff">Sloppy Quorums and Hinted Handoff</a></li>
+    <li><a href="#detecting-concurrent-writes">Detecting Concurrent Writes</a></li>
   </ul>
 </nav>
 
